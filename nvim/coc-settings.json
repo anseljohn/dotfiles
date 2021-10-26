@@ -1,0 +1,13 @@
+{
+  "suggest.timeout": 5000,
+  "suggest.triggerCompletionWait": 10,
+  "tslint.enable": false
+  "explorer.width": 30,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.previewAction.onHover": false,
+  "explorer.keyMappings": {
+	"<cr>": ["expandable?", "expand", "open"],
+	"v": "open:vsplit"
+  }
+  "explorer.openAction.strategy":"tab"
+}
