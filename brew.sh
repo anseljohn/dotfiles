@@ -5,5 +5,5 @@ sudo -v
 brew update
 brew upgrade
 
-xargs brew install < ./beers.txt
+xargs brew install < beer.txt
 brew install stow
