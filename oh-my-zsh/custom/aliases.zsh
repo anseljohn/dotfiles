@@ -56,7 +56,7 @@ cpprun () {
 
 jrun () {
 	JAVA=".java"
-	javac $1$JAVA && java $1
+	javac $1 && java ${1#"$JAVA"}
 }
 
 transfer () {
