@@ -1,4 +1,4 @@
-source ~/.oh-my-zsh/custom/main/local_aliases.zsh
+source ~/.oh-my-john/main/local_aliases.zsh
 # Dirs/global vars
 DEV="$USERD/dev"
 MONOREPO="$DEV/niantic"
