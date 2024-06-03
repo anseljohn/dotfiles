@@ -1,5 +1,5 @@
 # Load main aliases first
-source ~/.oh-my-john/custom/main/main.zsh
+source ~/.oh-my-john/main/main.zsh
 
 # Load generalized aliases
 for file in ~/.oh-my-john/aliases/*; do
