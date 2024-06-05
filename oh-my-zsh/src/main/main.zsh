@@ -66,12 +66,19 @@ alias back="cd - > /dev/null"
 # Misc
 alias rmf='rm -rf'
 alias rms='rm -rf *'
-alias reload='exec zsh'
 alias x='exit'
 alias fuck='figlet "fuck $@"'
 alias fucking='figlet "fucking $@"'
 alias fuckin='figlet "fuckin $@"'
 alias FUCK='figlet "FUCK $@"'
+
+reload() {
+  if [[ "$1" == "-c" ]];
+  then
+    clear
+  fi
+  exec zsh
+}
 
 
 # COLORS

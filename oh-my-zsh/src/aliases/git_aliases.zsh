@@ -75,3 +75,30 @@ update_aliases() {
   fi
 }
 
+update_vim() {
+  cd $DEV/dotfiles/nvim
+  rm -f init.lua
+  cp ~/.config/nvim/init.lua .
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    echo "No updates required."
+    return
+  fi
+
+  add . &>/dev/null
+  commit 'Update nvim init' &>/dev/null
+  nullput "push"
+  success=$(git status 2>/dev/null)
+  back
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    succ "Neovim init updated."
+  else
+    err "Failed to push updated neovim init."
+    echo "Output:"
+    echo "$success"
+  fi
+}
+
