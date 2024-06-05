@@ -41,7 +41,17 @@ push() {
       branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
       git push origin HEAD:$branch --force
     else
-      echo "Invalid argument '$1'"
+      git push $@
     fi
   fi
+}
+
+update_aliases() {
+  cd $DEV/dotfiles/oh-my-zsh/src
+  rm -rf aliases local_aliases main
+  cp -r ~/.oh-my-john/* .
+  add .
+  commit "Update aliases"
+  push
+  back
 }

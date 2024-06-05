@@ -59,6 +59,7 @@ alias fucking='figlet "fucking $@"'
 alias fuckin='figlet "fuckin $@"'
 alias FUCK='figlet "FUCK $@"'
 
+
 # COLORS
 # Reset
 Color_Off='\033[0m'       # Text Reset
