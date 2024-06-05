@@ -105,21 +105,21 @@ push_vim() {
 }
 
 update_aliases() {
+  currd=$(pwd)
   cd $DEV/dotfiles/
   pull &>/dev/null
-  back
   cd oh-my-zsh
   ./setup.zsh
   succ "Aliases updated."
-  back
+  cd $currd
 }
 
 update_vim() {
+  currd=$(pwd)
   cd $DEV/dotfiles/
   pull &>/dev/null
-  back
   rm -rf ~/.config/nvim/init.lua
   cp nvim/init.lua ~/.config/nvim/
   succ "Neovim init updated."
-  back
+  cd $currd
 }
