@@ -56,7 +56,7 @@ update_aliases() {
   if [[ $success == *"nothing to commit"* ]];
   then
     echo "No updates required."
-    exit 0
+    return
   fi
 
   add . &>/dev/null
