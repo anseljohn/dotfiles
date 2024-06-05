@@ -41,7 +41,64 @@ push() {
       branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
       git push origin HEAD:$branch --force
     else
-      echo "Invalid argument '$1'"
+      git push $@
     fi
   fi
 }
+
+update_aliases() {
+  cd $DEV/dotfiles/oh-my-zsh/src
+  rm -rf aliases local_aliases main
+  cp -r ~/.oh-my-john/* .
+
+  success=$(git status 2>/dev/null)
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    echo "No updates required."
+    return
+  fi
+
+  add . &>/dev/null
+  commit 'Update aliases' &>/dev/null
+  nullput "push"
+  success=$(git status 2>/dev/null)
+  back
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    succ "Alias repo updated."
+  else
+    err "Failed to push updated aliases."
+    echo "Output:"
+    echo "$success"
+  fi
+}
+
+update_vim() {
+  cd $DEV/dotfiles/nvim
+  rm -f init.lua
+  cp ~/.config/nvim/init.lua .
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    echo "No updates required."
+    return
+  fi
+
+  add . &>/dev/null
+  commit 'Update nvim init' &>/dev/null
+  nullput "push"
+  success=$(git status 2>/dev/null)
+  back
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    succ "Neovim init updated."
+  else
+    err "Failed to push updated neovim init."
+    echo "Output:"
+    echo "$success"
+  fi
+}
+

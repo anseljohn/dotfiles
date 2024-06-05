@@ -16,6 +16,9 @@ build() {
       if [[ "$1" == '--debug' ]];
       then
         bazel build --config debug -- //argeo/scaniverse/ScanKit/ScanKit/Neural/...
+      elif [[ "$1" == "-p" ]];
+      then
+	echo "bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/..."
       else
         bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/...
       fi
