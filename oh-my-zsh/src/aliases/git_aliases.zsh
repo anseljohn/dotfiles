@@ -50,6 +50,15 @@ update_aliases() {
   cd $DEV/dotfiles/oh-my-zsh/src
   rm -rf aliases local_aliases main
   cp -r ~/.oh-my-john/* .
+
+  success=$(git status 2>/dev/null)
+
+  if [[ $success == *"nothing to commit"* ]];
+  then
+    echo "No updates required."
+    exit 0
+  fi
+
   add . &>/dev/null
   commit 'Update aliases' &>/dev/null
   nullput "push"
