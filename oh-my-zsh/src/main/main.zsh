@@ -21,7 +21,7 @@ mycoms() {
 }
 
 nullput() {
-  $@ &>/dev/null
+  $@ 2>/dev/null
 }
 
 alias vim='nvim'
