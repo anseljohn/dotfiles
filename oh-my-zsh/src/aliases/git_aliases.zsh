@@ -51,6 +51,7 @@ update_aliases() {
   rm -rf aliases local_aliases main
   cp -r ~/.oh-my-john/* .
   add .
+  echo "hi"
   commit 'Update aliases'
   nullput "push"
   success=$(git status 2>/dev/null)
