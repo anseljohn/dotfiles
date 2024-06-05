@@ -1,5 +1,6 @@
-source ~/.oh-my-john/main/local_aliases.zsh
 # Dirs/global vars
+USERD="$HOME"
+ALIAS_LOC="$USERD/.oh-my-john/aliases"
 DEV="$USERD/dev"
 MONOREPO="$DEV/niantic"
 MESHING37="$DEV/data/meshing37"
