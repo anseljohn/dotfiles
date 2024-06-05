@@ -52,6 +52,15 @@ update_aliases() {
   cp -r ~/.oh-my-john/* .
   add .
   commit "Update aliases"
-  push
+  success=$(push)
   back
+
+  if [[ $success == *""* ]];
+  then
+  else
+    err "Failed to push updated aliases."
+    echo "Output:"
+    echo "$success"
+  fi
+
 }
