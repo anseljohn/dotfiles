@@ -50,8 +50,8 @@ update_aliases() {
   cd $DEV/dotfiles/oh-my-zsh/src
   rm -rf aliases local_aliases main
   cp -r ~/.oh-my-john/* .
-  add . 2>/dev/null
-  commit 'Update aliases' 2>/dev/null
+  add . &>/dev/null
+  commit 'Update aliases' &>/dev/null
   nullput "push"
   success=$(git status 2>/dev/null)
   back
