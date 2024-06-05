@@ -1,3 +1,2 @@
-USERD="/Users/johnanselmo"
-ALIAS_LOC="/Users/johnanselmo/.oh-my-john/aliases"
-alias cpcm="pbcopy"
+USERD="/home/johnanselmo_nianticlabs_com"
+ALIAS_LOC="$USERD/.oh-my-john/aliases"
