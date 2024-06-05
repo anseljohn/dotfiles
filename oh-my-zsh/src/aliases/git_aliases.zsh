@@ -51,13 +51,14 @@ update_aliases() {
   rm -rf aliases local_aliases main
   cp -r ~/.oh-my-john/* .
   add .
-  commit "Update aliases"
+  commit 'Update aliases'
   nullput "push"
-  success=$(push)
+  success=$(git status 2>/dev/null)
   back
 
-  if [[ $success == *""* ]];
+  if [[ $success == *"nothing to commit"* ]];
   then
+    succ "Alias repo updated."
   else
     err "Failed to push updated aliases."
     echo "Output:"

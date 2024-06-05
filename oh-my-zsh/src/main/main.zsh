@@ -30,6 +30,16 @@ alias ealias="vim $ALIASES"
 alias ohmy="cd $USERD/.oh-my-zsh"
 
 # Logging
+succ() {
+  if [ $# -eq 1 ];
+  then
+    echo "${Green}Success:${Color_Off} $1"
+  else
+    err "Invalid syntax."
+    echo 'Syntax: err <"Error Statement">'
+  fi
+}
+
 err() {
   if [ $# -eq 1 ];
   then
