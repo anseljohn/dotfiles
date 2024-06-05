@@ -20,6 +20,10 @@ mycoms() {
     echo "\tmerge (git merge)"
 }
 
+nullput() {
+  $@ >/dev/null
+}
+
 alias vim='nvim'
 alias evim="vim $VIM_CONFIG"
 alias ealias="vim $ALIASES"

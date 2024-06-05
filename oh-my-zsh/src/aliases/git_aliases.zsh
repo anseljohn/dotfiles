@@ -52,6 +52,7 @@ update_aliases() {
   cp -r ~/.oh-my-john/* .
   add .
   commit "Update aliases"
+  nullput "push"
   success=$(push)
   back
 
@@ -62,5 +63,5 @@ update_aliases() {
     echo "Output:"
     echo "$success"
   fi
-
 }
+
