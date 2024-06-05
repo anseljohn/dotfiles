@@ -46,7 +46,7 @@ push() {
   fi
 }
 
-update_aliases() {
+push_aliases() {
   cd $DEV/dotfiles/oh-my-zsh/src
   rm -rf aliases local_aliases main
   cp -r ~/.oh-my-john/* .
@@ -67,7 +67,7 @@ update_aliases() {
 
   if [[ $success == *"nothing to commit"* ]];
   then
-    succ "Alias repo updated."
+    succ "Pushed alias changes."
   else
     err "Failed to push updated aliases."
     echo "Output:"
@@ -75,7 +75,7 @@ update_aliases() {
   fi
 }
 
-update_vim() {
+push_vim() {
   cd $DEV/dotfiles/nvim
   rm -f init.lua
   cp ~/.config/nvim/init.lua .
@@ -94,7 +94,7 @@ update_vim() {
 
   if [[ $success == *"nothing to commit"* ]];
   then
-    succ "Neovim init updated."
+    succ "Pushed neovim init updates."
   else
     err "Failed to push updated neovim init."
     echo "Output:"
@@ -102,3 +102,18 @@ update_vim() {
   fi
 }
 
+update_aliases() {
+  cd $DEV/dotfiles/
+  pull &>/dev/null
+  cd oh-my-zsh
+  ./setup.zsh
+  succ "Aliases updated."
+}
+
+update_vim() {
+  cd $DEV/dotfiles/
+  pull &>/dev/null
+  rm -rf ~/.config/nvim/init.lua
+  cp nvim/init.lua ~/.config/nvim/
+  succ "Neovim init updated."
+}
