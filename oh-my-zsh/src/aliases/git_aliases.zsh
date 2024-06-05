@@ -63,7 +63,6 @@ push_aliases() {
   commit 'Update aliases' &>/dev/null
   nullput "push"
   success=$(git status 2>/dev/null)
-  back
 
   if [[ $success == *"nothing to commit"* ]];
   then
@@ -73,6 +72,8 @@ push_aliases() {
     echo "Output:"
     echo "$success"
   fi
+
+  back
 }
 
 push_vim() {
@@ -90,7 +91,6 @@ push_vim() {
   commit 'Update nvim init' &>/dev/null
   nullput "push"
   success=$(git status 2>/dev/null)
-  back
 
   if [[ $success == *"nothing to commit"* ]];
   then
@@ -100,6 +100,8 @@ push_vim() {
     echo "Output:"
     echo "$success"
   fi
+
+  back
 }
 
 update_aliases() {
@@ -108,6 +110,7 @@ update_aliases() {
   cd oh-my-zsh
   ./setup.zsh
   succ "Aliases updated."
+  back
 }
 
 update_vim() {
@@ -116,4 +119,5 @@ update_vim() {
   rm -rf ~/.config/nvim/init.lua
   cp nvim/init.lua ~/.config/nvim/
   succ "Neovim init updated."
+  back
 }
