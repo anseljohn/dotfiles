@@ -107,6 +107,7 @@ push_vim() {
 update_aliases() {
   cd $DEV/dotfiles/
   pull &>/dev/null
+  back
   cd oh-my-zsh
   ./setup.zsh
   succ "Aliases updated."
@@ -116,6 +117,7 @@ update_aliases() {
 update_vim() {
   cd $DEV/dotfiles/
   pull &>/dev/null
+  back
   rm -rf ~/.config/nvim/init.lua
   cp nvim/init.lua ~/.config/nvim/
   succ "Neovim init updated."
