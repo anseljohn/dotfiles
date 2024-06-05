@@ -53,7 +53,7 @@ update_aliases() {
   add .
   commit "Update aliases"
   nullput "push"
-  success="eawke"
+  success=$(push)
   back
 
   if [[ $success == *""* ]];
