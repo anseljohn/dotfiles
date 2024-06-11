@@ -6,15 +6,6 @@ vim.wo.number = true
 -- Shortcuts
 vim.cmd([[
 
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
 nnoremap <leader>e :NvimTreeToggle<CR>
 nmap <silent> <c-k> :wincmd k<CR>
 nmap <silent> <c-j> :wincmd j<CR>
@@ -27,9 +18,6 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
-set updatetime=100
-set signcolumn=yes
-set nocompatible
 ]])
 
 vim.call('plug#begin')
@@ -37,14 +25,9 @@ vim.call('plug#begin')
 vim.cmd([[
 Plug 'nvim-tree/nvim-web-devicons' " optional
 Plug 'nvim-tree/nvim-tree.lua'
-
 Plug 'EdenEast/nightfox.nvim' " Vim-Plug
 Plug 'folke/tokyonight.nvim'
-
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-Plug 'sheerun/vim-polyglot'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 ]])
 
 
