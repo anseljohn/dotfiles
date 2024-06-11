@@ -8,15 +8,6 @@ isMonorepo() {
     fi
 }
 
-gentags() {
-  if isMonorepo ;
-  then
-    ctags --recurse=yes --exclude=bazel-bin --exclude=bazel-out --exclude=bazel-niantic --exclude=bazel-testlogs  --exclude=CMakeLists.txt  --exclude=FacebookSDK --exclude='*.json' --exclude='*.js' --exclude='*.sql' --exclude=.git --exclude=BUILD
-  else
-    err "Not in a project directory."
-  fi
-}
-
 
 # Project stuff
 build() {
