@@ -33,7 +33,8 @@ vmcp() {
   if [[ "$#" -le 0 ]];
   then
     echo "Illegal number of arguments."
-    echo "Usage: vmcp <source-file> <vm-destination>"
+    echo "Usage: vmcp <source-file> <vm-name>:<vm-destination>"
+    echo " - Swap arguments for remote to local copy."
     echo "or"
     echo "vmcp:"
     echo "\t--vim | copies vim config"
@@ -50,7 +51,7 @@ vmcp() {
         #vmcp $ALIASES $VIM_ALIASES
         ;;
       *)
-        gcloud compute scp $1 $VM_NAME:$2 --zone "us-west1-b"
+        gcloud compute scp $1 $2 --zone "us-west1-b"
     esac
   fi
 }
