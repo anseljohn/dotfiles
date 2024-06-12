@@ -73,6 +73,7 @@ push_aliases() {
   if [[ $success == *"nothing to commit"* ]];
   then
     echo "No updates required."
+    back
     return
   fi
 
@@ -101,6 +102,7 @@ push_vim() {
   if [[ $success == *"nothing to commit"* ]];
   then
     echo "No updates required."
+    back
     return
   fi
 
@@ -121,7 +123,7 @@ push_vim() {
   back
 }
 
-update_aliases() {
+pull_aliases() {
   currd=$(pwd)
   cd $DEV/dotfiles/
   pull &>/dev/null
@@ -131,7 +133,7 @@ update_aliases() {
   cd $currd
 }
 
-update_vim() {
+pull_vim() {
   currd=$(pwd)
   cd $DEV/dotfiles/
   pull &>/dev/null
