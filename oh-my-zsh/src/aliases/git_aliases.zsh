@@ -171,7 +171,7 @@ push_config() {
   VO=$(push_vim)
   AO=$(push_aliases)
   
-  if [ "$V0" == *"required"* ] && [ "$AO" == *"required"* ];
+  if [[ "$V0" == *"required"* ]] && [[ "$AO" == *"required"* ]];
   then
     echo "Configs are up to date."
   else
