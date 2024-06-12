@@ -18,11 +18,10 @@ build() {
         bazel build --config debug -- //argeo/scaniverse/ScanKit/ScanKit/Neural/...
       elif [[ "$1" == "-p" ]];
       then
-	echo "bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/..."
+        echo "bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/..."
       else
         bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/...
       fi
-
     else
         echo "Not in a buildable directory."
     fi
@@ -31,12 +30,15 @@ build() {
 prepScan() {
   if isMonorepo ;
   then
-    rm -rf /var/tmp/preparescan
     if [[ "$1" == "-a" ]];
     then
-      $MONOREPO/bazel-out/darwin_arm64-fastbuild/bin/argeo/scaniverse/ScanKit/ScanKit/Neural/PrepareScan $statue
+      rm -rf ~/prepped_scan
+      bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $statue \
+        --output ~/prepped_scan
     else
-      $MONOREPO/bazel-out/darwin_arm64-fastbuild/bin/argeo/scaniverse/ScanKit/ScanKit/Neural/PrepareScan $1
+      rm -rf ~/scaniverse-benchmark-pradofountain-data
+      bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $1 \
+        --output ~/scaniverse-benchmark-pradofountain-data
     fi
   else
     echo "You are not currently in the monorepo."
@@ -49,11 +51,24 @@ benchmark() {
   then
     arg1=/var/tmp/preparescan
     arg2=~/prep-scan-testing-output
-    if [[ "$1" != "-a" ]];
-    then
-      arg1="$1"
-      arg2="$2"
-    fi
+
+    case "$1" in
+      "-a")
+        continue
+        ;;
+      "-i")
+        if [[ "$2" == "" ]];
+        then
+          err "Invalid syntax."
+          echo "Syntax: benchmark -i /path/to/prepped_scan"
+        else
+          arg1="$2"
+        fi
+        ;;
+      *)
+        echo "Invalid option '$1'"
+        return 1
+    esac
 
     rm -rf $arg2
 

@@ -27,7 +27,7 @@ nullput() {
 
 alias vim='nvim'
 alias evim="vim $VIM_CONFIG"
-alias ealias="vim $ALIASES"
+alias ealias="vim $USERD/.oh-my-john"
 alias ohmy="cd $USERD/.oh-my-zsh"
 
 # Logging
