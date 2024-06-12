@@ -63,6 +63,7 @@ alias mono="cd $MONOREPO"
 alias dev="cd $DEV"
 alias down="cd $USERD/Downloads"
 alias back="cd - > /dev/null"
+alias dot="cd $DEV/dotfiles"
 
 # Misc
 alias rmf='rm -rf'

@@ -12,6 +12,8 @@ alias rebase='git rebase'
 alias add='git add'
 alias branch='git rev-parse --abbrev-ref HEAD'
 alias check='git checkout'
+alias pull_config='pull_vim && pull_aliases'
+alias push_config='push_vim && push_aliases'
 
 merge() {
   curr_branch=$(branch)
@@ -126,19 +128,31 @@ push_vim() {
 pull_aliases() {
   currd=$(pwd)
   cd $DEV/dotfiles/
-  pull &>/dev/null
-  cd oh-my-zsh
-  ./setup.zsh
-  succ "aliases updated."
-  cd $currd
+
+  if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
+  then
+    echo "Aliases are up to date."
+  else
+    pull &>/dev/null
+    cd oh-my-zsh
+    ./setup.zsh
+    succ "aliases updated."
+  fi
+  back
 }
 
 pull_vim() {
-  currd=$(pwd)
   cd $DEV/dotfiles/
-  pull &>/dev/null
-  rm -rf ~/.config/nvim/init.lua
-  cp nvim/init.lua ~/.config/nvim/
-  succ "neovim init updated."
-  cd $currd
+
+  if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
+  then
+    echo "Vim config is up to date."
+  else
+    pull &>/dev/null
+    rm -rf ~/.config/nvim/init.lua
+    cp nvim/init.lua ~/.config/nvim/
+    succ "neovim init updated."
+  fi
+  back
 }
+
