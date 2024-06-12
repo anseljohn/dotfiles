@@ -72,7 +72,7 @@ push_aliases() {
 
   if [[ $success == *"nothing to commit"* ]];
   then
-    echo "No updates required."
+    echo "No alias updates required."
     back
     return
   fi
@@ -101,7 +101,7 @@ push_vim() {
 
   if [[ $success == *"nothing to commit"* ]];
   then
-    echo "No updates required."
+    echo "No vim updates required."
     back
     return
   fi
@@ -180,6 +180,3 @@ push_config() {
     echo "$AO"
   fi
 }
-
-alias pull_config='pull_vim && pull_aliases'
-alias push_config='push_vim && push_aliases'
