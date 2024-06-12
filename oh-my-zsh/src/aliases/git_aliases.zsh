@@ -127,7 +127,7 @@ update_aliases() {
   pull &>/dev/null
   cd oh-my-zsh
   ./setup.zsh
-  succ "Aliases updated."
+  succ "aliases updated."
   cd $currd
 }
 
@@ -137,6 +137,6 @@ update_vim() {
   pull &>/dev/null
   rm -rf ~/.config/nvim/init.lua
   cp nvim/init.lua ~/.config/nvim/
-  succ "Neovim init updated."
+  succ "neovim init updated."
   cd $currd
 }
