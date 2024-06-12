@@ -12,8 +12,6 @@ alias rebase='git rebase'
 alias add='git add'
 alias branch='git rev-parse --abbrev-ref HEAD'
 alias check='git checkout'
-alias pull_config='pull_vim && pull_aliases'
-alias push_config='push_vim && push_aliases'
 
 merge() {
   curr_branch=$(branch)
@@ -156,3 +154,31 @@ pull_vim() {
   back
 }
 
+pull_config() {
+  VO=$(pull_vim)
+  AO=$(pull_aliases)
+
+  if [ "$V0" == *"up to date"* ] && [ "$AO" == *"up to date"* ];
+  then
+    echo "Configs are up to date."
+  else
+    echo "$VO"
+    echo "$AO"
+  fi
+}
+
+push_config() {
+  VO=$(push_vim)
+  AO=$(push_aliases)
+  
+  if [[ "$V0" == "$AO" ]];
+  then
+    echo "Configs are up to date."
+  else
+    echo "$VO"
+    echo "$AO"
+  fi
+}
+
+alias pull_config='pull_vim && pull_aliases'
+alias push_config='push_vim && push_aliases'
