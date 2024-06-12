@@ -175,6 +175,7 @@ push_config() {
   then
     echo "Configs are up to date."
   else
+    echo "wat"
     echo "$VO"
     echo "$AO"
   fi
