@@ -13,15 +13,38 @@ isMonorepo() {
 build() {
     if isMonorepo ;
     then
-      if [[ "$1" == '--debug' ]];
-      then
-        bazel build --config debug -- //argeo/scaniverse/ScanKit/ScanKit/Neural/...
-      elif [[ "$1" == "-p" ]];
-      then
-        echo "bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/..."
-      else
-        bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/...
-      fi
+      bb='bazel build'
+      opts=''
+      target=' -- //argeo/scaniverse/ScanKit/ScanKit/'
+      case $1 in
+        '--debug')
+          opts+=' --config debug'
+          target+='Neural/...'
+          ;;
+        'pipeline')
+          target+='Pipeline/...'
+          ;;
+        'neural')
+          target+='Neural/...'
+          ;;
+        '--targets')
+          echo "Available targets:"
+          echo "[pipeline, neural]"
+          echo "ex."
+          echo "$ build neural"
+          return 1
+          ;;
+        *)
+          echo "Invalid build target."
+          echo "ex."
+          echo "$ build neural : runs bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/..."
+          return 0
+        ;;
+
+      esac
+      fs=$bb$opts$target
+      echo "Running '$fs'"
+      eval $fs
     else
         echo "Not in a buildable directory."
     fi
@@ -78,7 +101,7 @@ benchmark() {
       --useDensePoints \
       --disableExposureModel \
       --useAppPhases \
-      --renderInterval 10 \
+      --renderInterval 0 \
       --pos 0.4,0,0 --target 0,0,-5
   else
     echo "You are not currently in the monorepo."
