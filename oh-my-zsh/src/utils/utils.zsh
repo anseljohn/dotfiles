@@ -8,7 +8,7 @@ alias evim="vim $VIM_CONFIG"
 ealias() {
   case $1 in
     "")
-      vim $OH_MY_JOHNA
+      vim $OH_MY_JOHN
       ;;
     "code")
       code $OH_MY_JOHN
