@@ -92,7 +92,7 @@ push_aliases() {
 }
 
 push_vim() {
-  cd $DEV/dotfiles/nvim
+  cd $OMJ_HOME/nvim
   rm -f init.lua
   cp ~/.config/nvim/init.lua .
 
@@ -121,15 +121,13 @@ push_vim() {
 }
 
 pull_aliases() {
-  cd $DEV/dotfiles/
+  cd $OMJ_HOME
 
   if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
   then
     echo "Aliases are up to date."
   else
     pull &>/dev/null
-    cd oh-my-zsh
-    ./setup.zsh
     succ "aliases updated."
   fi
   back
@@ -155,19 +153,6 @@ pull_config() {
   AO=$(pull_aliases)
 
   if [[ $V0 =~ "up to" ]] && [[ $AO =~ "up to" ]];
-  then
-    echo "Configs are up to date."
-  else
-    echo "$VO"
-    echo "$AO"
-  fi
-}
-
-push_config() {
-  VO=$(push_vim)
-  AO=$(push_aliases)
-  
-  if [[ "$V0" == *"required."* ]] && [[ "$AO" == *"required."* ]];
   then
     echo "Configs are up to date."
   else
