@@ -8,6 +8,27 @@ isMonorepo() {
     fi
 }
 
+alias _dracoConverter=$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter
+convdrc() {
+  infapps="$MONOREPO/bazel-bin/argeo/infinitam/Apps"
+  if [ -d $infapps ] && [[ -f $infapps/DracoConverter ]];
+  then
+    _dracoConverter $@
+  else
+    if [[ "$1" == "--build" ]];
+    then
+      cd $MONOREPO
+      build converter
+      back
+    else
+      err "DracoConverter app is not build."
+      echo "Please run 'bazel build -- //argeo/infinitam/Apps:DracoConverter' in the monorepo."
+      echo "(You may have to add DracoConverter to the Apps BUILD file)"
+      echo "or"
+      echo "Run convdrc --build <args>"
+    fi
+  fi
+}
 
 # Project stuff
 build() {
@@ -15,24 +36,32 @@ build() {
     then
       bb='bazel build'
       opts=''
-      target=' -- //argeo/scaniverse/ScanKit/ScanKit/'
+      target=''
+      scankit=' -- //argeo/scaniverse/ScanKit/ScanKit/'
+      infinitam=' -- //argeo/infinitam/'
       case $1 in
         '--debug')
           opts+=' --config debug'
-          target+='Neural/...'
+          target+=$scankit'Neural/...'
           ;;
         'pipeline')
-          target+='Pipeline/...'
+          target+=$scankit'Pipeline/...'
           ;;
         'neural')
-          target+='Neural/...'
+          target+=$scankit'Neural/...'
           ;;
         'scankit')
-          target+='...'
+          target+=$scankit'...'
+          ;;
+        'converter')
+          target+=$infinitam'Apps:DracoConverter'
+          ;;
+        'multidepth')
+          target+=$infinitam'Apps:MultiDepth_Console'
           ;;
         '--targets')
           echo "Available targets:"
-          echo "[pipeline, neural]"
+          echo "[pipeline, neural, converter, multidepth]"
           echo "ex."
           echo "$ build neural"
           return 1
