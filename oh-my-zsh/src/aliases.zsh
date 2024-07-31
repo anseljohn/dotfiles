@@ -1,1 +1,1 @@
-source ~/.oh-my-john/main.zsh
+source ~/.oh-my-john/oh-my-zsh/src/main.zsh

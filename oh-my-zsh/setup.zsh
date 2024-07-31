@@ -1,7 +1,13 @@
 #!/bin/zsh
 
 rm -rf ~/.oh-my-john
-mkdir -p ~/.oh-my-john
-cp -r ~/dev/dotfiles/oh-my-zsh/src/* ~/.oh-my-john
-cp -fr ~/.oh-my-john/aliases.zsh ~/.oh-my-zsh/custom
+dotfiles=$(dirname $( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
+configd=$(dirname $dotfiles)/.oh-my-john
+mv $dotfiles $configd
+mv $configd ~
+
+cp -fr ~/.oh-my-john/oh-my-zsh/src/aliases.zsh ~/.oh-my-zsh/custom
 source ~/.zshrc
+
+# Cleanup
+rm -rf $dotfiles
