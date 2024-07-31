@@ -70,7 +70,6 @@ push() {
 }
 
 push_aliases() {
-  echo "Pushing alias changes..."
   cd $OMJ_HOME
   success=$(git status 2>/dev/null)
 
@@ -81,6 +80,7 @@ push_aliases() {
     return
   fi
 
+  echo "Pushing alias changes..."
   add . &>/dev/null
   commit 'Update aliases' &>/dev/null
   nullput "push"
@@ -99,7 +99,6 @@ push_aliases() {
 }
 
 push_vim() {
-  echo "Pushing neovim changes..."
   cd $OMJ_HOME/nvim
   rm -f init.lua
   cp ~/.config/nvim/init.lua .
@@ -110,7 +109,8 @@ push_vim() {
     back
     return
   fi
-
+  
+  echo "Pushing neovim changes..."
   add . &>/dev/null
   commit 'Update nvim init' &>/dev/null
   nullput "push"
