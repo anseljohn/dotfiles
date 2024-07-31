@@ -63,7 +63,8 @@ build() {
           target+=$infinitam'Apps:DracoConverter'
           ;;
         'multidepth')
-          target+=$infinitam'Apps:MultiDepth_Console'
+          target+=$infinitam'Apps:MultiDepthConsole'
+          bazel build -- //argeo/infinitam/Apps:MultiDepthConsole
           ;;
         '--targets')
           echo "Available targets:"
