@@ -62,7 +62,7 @@ push() {
 
 push_aliases() {
   cd $DEV/dotfiles/oh-my-zsh/src
-  rm -rf aliases local_aliases main
+  rm -rf *
   cp -r ~/.oh-my-john/* .
 
   success=$(git status 2>/dev/null)
@@ -121,7 +121,6 @@ push_vim() {
 }
 
 pull_aliases() {
-  currd=$(pwd)
   cd $DEV/dotfiles/
 
   if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];

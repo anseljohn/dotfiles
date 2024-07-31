@@ -35,7 +35,6 @@ drcconv() {
     fi
   fi
 }
-alias drcconv=convdrc
 
 # Project stuff
 build() {
