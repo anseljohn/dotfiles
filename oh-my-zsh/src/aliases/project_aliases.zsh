@@ -129,6 +129,17 @@ renderSplats() {
   esac
 }
 
+copyDepths() {
+  if [ $# -lt 2 -o $# -gt 2 ];
+  then
+    err "Invalid number of arguments."
+    echo "Syntax: copyDepths <path/to/render> <path/to/recorderV2/folder>"
+  else
+    echo "python3 ~/dev/tools/SplatDepthToRV2/SplatDepthToRV2.py $1 $2"
+  fi
+
+}
+
 # Directory dependent
 benchmark() {
   if isMonorepo ;
