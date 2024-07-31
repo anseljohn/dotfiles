@@ -64,10 +64,7 @@ push() {
 }
 
 push_aliases() {
-  cd $DEV/dotfiles/oh-my-zsh/src
-  rm -rf *
-  cp -r ~/.oh-my-john/* .
-
+  cd $OMJ_HOME
   success=$(git status 2>/dev/null)
 
   if [[ $success == *"nothing to commit"* ]];

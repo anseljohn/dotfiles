@@ -1,5 +1,5 @@
 # Sourcing
-for file in ~/.oh-my-john/utils/*; do
+for file in ~/.oh-my-john/oh-my-zsh/src/utils/*; do
   source $file
 done
 

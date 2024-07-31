@@ -1,5 +1,3 @@
-#source ~/.oh-my-john/utils/dirs.zsh
-
 ################################################
 # Straightforward aliases for general commands #
 ################################################
@@ -7,7 +5,7 @@
 
 alias vim='nvim'
 alias evim="vim $VIM_CONFIG"
-alias ealias="vim $USERD/.oh-my-john"
+alias ealias="vim $OH_MY_JOHN"
 
 # To Dirs
 alias mono="cd $MONOREPO"
