@@ -27,6 +27,9 @@ build() {
         'neural')
           target+='Neural/...'
           ;;
+        'scankit')
+          target+='...'
+          ;;
         '--targets')
           echo "Available targets:"
           echo "[pipeline, neural]"
@@ -53,19 +56,77 @@ build() {
 prepScan() {
   if isMonorepo ;
   then
-    if [[ "$1" == "-a" ]];
-    then
-      rm -rf ~/prepped_scan
-      bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $statue \
-        --output ~/prepped_scan
-    else
-      rm -rf ~/scaniverse-benchmark-pradofountain-data
-      bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $1 \
-        --output ~/scaniverse-benchmark-pradofountain-data
-    fi
+    case $1 in
+      '-a')
+        rm -rf ~/prepped_scan
+        bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $statue \
+          --output ~/prepped_scan
+        ;;
+      *)
+        if [[ "$2" == "" ]];
+        then
+          echo "Invalid output."
+          echo "Usage: prepScan <path/to/scan.tgz> <path/to/output/folder>"
+        else
+          bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $1 \
+            --output $2 $3 $4 $5
+        fi
+    esac
   else
     echo "You are not currently in the monorepo."
   fi
+}
+
+trainSplats() {
+  case "$1" in 
+    "")
+      echo "Invalid input."
+      echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
+      ;;
+    "-d")
+      if [[ "$3" == "" ]];
+      then
+        echo "Invalid output directory."
+        echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
+      else
+        rm -rf $3
+        trainSplats ${@:2}
+      fi
+      ;;
+    *)
+      if [[ "$2" == "" ]];
+      then
+        echo "Invalid output directory."
+        echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
+      else
+        bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:TrainSplats \
+          $1 \
+          --output $2 \
+          --useDensePoints \
+          --disableExposureModel \
+          --useAppPhases \
+          --renderInterval 10 \
+          --pos 0.4,0,0 --target 0,0,-5
+      fi
+  esac
+}
+
+renderSplats() {
+  case "$1" in
+    "-d")
+      rm -rf /var/tmp/rendersplats
+      if [[ "$2" == "" ]];
+      then
+        echo "Invalid syntax."
+        echo "Usage: renderSplats <opts> </path/to/model.ply>"
+      else
+        renderSplats ${@:2}
+      fi
+      ;;
+    *)
+      bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats \
+        $@
+  esac
 }
 
 # Directory dependent
@@ -103,32 +164,6 @@ benchmark() {
       --useAppPhases \
       --renderInterval 0 \
       --pos 0.4,0,0 --target 0,0,-5
-  else
-    echo "You are not currently in the monorepo."
-  fi
-}
-
-renderSplats() {
-  if isMonorepo ;
-  then
-    arg="prep-scan-testing-output"
-
-    if [[ "$1" != "-a" ]];
-    then
-      arg="scaniverse-benchmark-output"
-    fi
-
-    bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats \
-      "$HOME/$arg/step00900/model.ply" \
-      --orbit --target 0,-0.2,-3 --radius 3 --pitch -5 --width 1920
-
-    bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats \
-      "$HOME/$arg/step01300/model.ply" \
-      --orbit --target 0,-0.2,-3 --radius 3 --pitch -5 --width 1920
-
-    bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats \
-      "$HOME/$arg/step03600/model.ply" \
-      --orbit --target 0,-0.2,-3 --radius 3 --pitch -5 --width 1920
   else
     echo "You are not currently in the monorepo."
   fi

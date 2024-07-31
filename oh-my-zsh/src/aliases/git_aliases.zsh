@@ -6,28 +6,25 @@ alias diff='git diff'
 alias subup='git submodule update --init --recursive'
 alias staged='git diff --cached'
 alias gselect='git add -p'
-alias stash='git stash'
 alias pop='git stash pop'
 alias rebase='git rebase'
 alias add='git add'
 alias branch='git rev-parse --abbrev-ref HEAD'
+alias merge='git merge'
 alias check='git checkout'
 
-merge() {
-  curr_branch=$(branch)
-
-  if [[ "$curr_branch" == "main" ]];
-  then
-    echo "Already on 'main'"
-  else
-    if [[ "$1" == "" ]];
-    then
-        echo "Invalid branch"
-    else
-      echo "fetch origin"
-      echo "merge $1"
-    fi
-  fi
+stash() {
+  case $1 in
+    "")
+      git stash
+      ;;
+    "list")
+      git stash list
+      ;;
+    *)
+      git stash push -m $1
+      ;;
+  esac
 }
 
 commit() {
