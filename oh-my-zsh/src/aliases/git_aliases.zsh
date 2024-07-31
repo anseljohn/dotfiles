@@ -64,6 +64,7 @@ push() {
 }
 
 push_aliases() {
+  echo "Pushing alias changes..."
   cd $OMJ_HOME
   success=$(git status 2>/dev/null)
 
@@ -92,6 +93,7 @@ push_aliases() {
 }
 
 push_vim() {
+  echo "Pushing neovim changes..."
   cd $OMJ_HOME/nvim
   rm -f init.lua
   cp ~/.config/nvim/init.lua .
