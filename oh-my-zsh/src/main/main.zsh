@@ -29,6 +29,7 @@ alias vim='nvim'
 alias evim="vim $VIM_CONFIG"
 alias ealias="vim $USERD/.oh-my-john"
 alias ohmy="cd $USERD/.oh-my-zsh"
+alias peepee="echo peepee"
 
 # Logging
 succ() {

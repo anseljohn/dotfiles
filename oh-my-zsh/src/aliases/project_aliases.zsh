@@ -9,7 +9,13 @@ isMonorepo() {
 }
 
 alias _dracoConverter=$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter
-convdrc() {
+drcconv() {
+  	Usage: DracoConverter [base64?: yes/no] [drcFile or base64 text file] [exportPath] (pathToTexture/filename.jpeg or base64 text file)
+  case $1 in 
+    "-h" | "-help")
+      echo "Syntax: drcconv [base64?: yes/no] [drcFile or base64 text file] [exportPath] (pathToTexture/file.jpeg or base64 text file)"
+  esac
+
   infapps="$MONOREPO/bazel-bin/argeo/infinitam/Apps"
   if [ -d $infapps ] && [[ -f $infapps/DracoConverter ]];
   then
@@ -29,6 +35,7 @@ convdrc() {
     fi
   fi
 }
+alias drcconv=convdrc
 
 # Project stuff
 build() {
