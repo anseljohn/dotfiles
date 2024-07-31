@@ -28,7 +28,8 @@ project_aliases="
   trainSplats,
   renderSplats,
   copyDepths,
-  benchmark"
+  benchmark,
+  mesheval"
 
 declare -A vm_aliases
 vm_aliases="

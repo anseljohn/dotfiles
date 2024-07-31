@@ -10,7 +10,6 @@ isMonorepo() {
 
 alias _dracoConverter=$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter
 drcconv() {
-  	Usage: DracoConverter [base64?: yes/no] [drcFile or base64 text file] [exportPath] (pathToTexture/filename.jpeg or base64 text file)
   case $1 in 
     "-h" | "-help")
       echo "Syntax: drcconv [base64?: yes/no] [drcFile or base64 text file] [exportPath] (pathToTexture/file.jpeg or base64 text file)"
@@ -64,7 +63,9 @@ build() {
           ;;
         'multidepth')
           target+=$infinitam'Apps:MultiDepthConsole'
-          bazel build -- //argeo/infinitam/Apps:MultiDepthConsole
+          ;;
+        'meshcomparer')
+          target+=$infinitam'Apps:MeshComparer'
           ;;
         '--targets')
           echo "Available targets:"
@@ -214,3 +215,5 @@ benchmark() {
     echo "You are not currently in the monorepo."
   fi
 }
+
+alias createmesh="python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py"
