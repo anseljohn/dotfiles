@@ -1,5 +1,6 @@
 USERD="$HOME"
 
+OH_MY_JOHN="$USERD/.oh-my-john"
 ALIAS_LOC="$USERD/.oh-my-john/aliases"
 LOCAL_ALIAS_LOC="$USERD/.oh-my-john/local_aliases"
 declare -a alias_locs=($ALIAS_LOC $LOCAL_ALIAS_LOC)

@@ -175,7 +175,6 @@ copyDepths() {
 
 }
 
-# Directory dependent
 benchmark() {
   if isMonorepo ;
   then

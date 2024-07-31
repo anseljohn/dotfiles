@@ -1,3 +1,6 @@
+
+alias git_aliases="echo $git_aliases"
+
 alias pull='git pull'
 alias fetch='git fetch'
 alias clone='git clone'
