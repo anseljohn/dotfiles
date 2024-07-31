@@ -5,7 +5,19 @@
 
 alias vim='nvim'
 alias evim="vim $VIM_CONFIG"
-alias ealias="vim $OH_MY_JOHN"
+ealias() {
+  case $1 in
+    "")
+      vim $OH_MY_JOHNA
+      ;;
+    "code")
+      code $OH_MY_JOHN
+      ;;
+    *)
+      err "Invalid syntax."
+      echo "Syntax: ealias <code>"
+  esac
+}
 
 # To Dirs
 alias mono="cd $MONOREPO"
