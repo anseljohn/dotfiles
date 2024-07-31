@@ -49,18 +49,24 @@ commit() {
 }
 
 push() {
-  if [[ $# -eq  0 ]];
-  then
-    git push
-  else
-    if [[ "$1" == "--force" ]];
-    then
+  case $1 in
+    "")
+      git push
+      ;;
+    "--force")
       branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
       git push origin HEAD:$branch --force
-    else
+      ;;
+    "aliases")
+      push_aliases
+      ;;
+    "vim")
+      push_vim
+      ;; 
+    *)
       git push $@
-    fi
-  fi
+      ;;
+  esac
 }
 
 push_aliases() {
