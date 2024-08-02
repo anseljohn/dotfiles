@@ -10,21 +10,36 @@ isMonorepo() {
 
 alias _dracoConverter=$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter
 drcconv() {
-  case $1 in 
-    "-h" | "-help")
-      echo "Syntax: drcconv [base64?: yes/no] [drcFile or base64 text file] [exportPath] (pathToTexture/file.jpeg or base64 text file)"
-  esac
-
   infapps="$MONOREPO/bazel-bin/argeo/infinitam/Apps"
   if [ -d $infapps ] && [[ -f $infapps/DracoConverter ]];
   then
-    _dracoConverter $@
+    args=()
+    deletePrev=false
+    for arg in "$@"; do
+      case "$arg" in
+        "-d")
+          deletePrev=true
+          ;;
+        *)
+          args+="$arg"
+      esac
+    done
+
+    if [[ "$deletePrev" == true ]]; 
+    then 
+      cd ${args[3]}
+      rm -f fromblob.bin  fromblob.fbx  fromblob.glb  fromblob.gltf outMesh.bin   outMesh.fbx   outMesh.glb   outMesh.gltf
+      back
+    fi
+
+    _dracoConverter $args
   else
     if [[ "$1" == "--build" ]];
     then
       cd $MONOREPO
       build converter
       back
+      drcconv ${@:2}
     else
       err "DracoConverter app is not build."
       echo "Please run 'bazel build -- //argeo/infinitam/Apps:DracoConverter' in the monorepo."
@@ -33,6 +48,7 @@ drcconv() {
       echo "Run convdrc --build <args>"
     fi
   fi
+
 }
 
 # Project stuff
@@ -116,6 +132,13 @@ prepScan() {
 
 trainSplats() {
   case "$1" in 
+    "-h")
+      echo "trainSplats: Trains a neural network to predict splats from a prepped scan."
+      echo "\tUsage: trainSplats <opts> <path/to/prepped/scan> <path/to/output/folder>"
+      echo "Options:"
+      echo "\t-d: Delete the output directory before running."
+      echo "\t-h: Display this help message."
+      ;;
     "")
       echo "Invalid input."
       echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
@@ -149,7 +172,21 @@ trainSplats() {
 }
 
 renderSplats() {
+  if [ "$@" -lt 1 ] || [ "$@" -gt 2 ];
+  then
+    echo "Invalid syntax."
+    echo "Usage: renderSplats <opts> </path/to/model.ply>"
+    return 0
+  fi
+
   case "$1" in
+    "-h")
+      echo "renderSplats: Renders splats from a prepped scan."
+      echo "\tUsage: renderSplats <opts> </path/to/model.ply>"
+      echo "Options:"
+      echo "\t-d: Delete the output directory before running."
+      echo "\t-h: Display this help message."
+      ;;
     "-d")
       rm -rf /var/tmp/rendersplats
       if [[ "$2" == "" ]];
