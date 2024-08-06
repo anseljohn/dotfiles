@@ -12,6 +12,7 @@ git_aliases="
   gselect,
   pop,
   rebase,
+  reset,
   add,
   branch,
   merge,
@@ -27,9 +28,11 @@ project_aliases="
   prepScan,
   trainSplats,
   renderSplats,
+  multidepth,
   copyDepths,
   benchmark,
-  mesheval"
+  mesheval,
+  createmesh"
 
 declare -A vm_aliases
 vm_aliases="

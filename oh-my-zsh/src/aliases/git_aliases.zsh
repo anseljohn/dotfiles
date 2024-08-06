@@ -16,6 +16,10 @@ alias branch='git rev-parse --abbrev-ref HEAD'
 alias merge='git merge'
 alias check='git checkout'
 
+reset() {
+  git reset $@
+}
+
 stash() {
   case $1 in
     "")

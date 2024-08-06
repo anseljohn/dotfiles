@@ -83,9 +83,12 @@ build() {
         'meshcomparer')
           target+=$infinitam'Apps:MeshComparer'
           ;;
+        'rendersplats')
+          target+=$scankit'Neural:RenderSplats'
+          ;;
         '--targets')
           echo "Available targets:"
-          echo "[pipeline, neural, converter, multidepth]"
+          echo "[pipeline, neural, scankit, converter, multidepth, meshcomparer, rendersplats]"
           echo "ex."
           echo "$ build neural"
           return 1
@@ -209,7 +212,7 @@ copyDepths() {
     err "Invalid number of arguments."
     echo "Syntax: copyDepths <path/to/render> <path/to/recorderV2/folder>"
   else
-    echo "python3 ~/dev/tools/SplatDepthToRV2/SplatDepthToRV2.py $1 $2"
+    python3 ~/dev/tools/SplatDepthToRV2/SplatDepthToRV2.py $1 $2
   fi
 
 }
@@ -254,3 +257,26 @@ benchmark() {
 }
 
 alias createmesh="python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py"
+# renderSplats ~/prepped_scan_splat/step04200/model.ply --renderDepthBins --cameraPath --useCameras --rootPath ~/20211122-133753_560ae00e-9dfa-4494-9c23-5419210fe1c3_1_of_1.tgz --datasetType recorder_v2
+# rendersplats: ply, 
+# multidepth() {
+#   if isMonorepo ;
+#   then
+#     case "$1" in
+#       "-h")
+#         echo "multidepth: Runs the MultiDepthConsole app."
+#         echo "Usage: multidepth <opts> "
+#         echo "Options:"
+#         echo "\t-h: Display this help message."
+#         ;;
+#       "")
+#         bazel run -- //argeo/infinitam/Apps:MultiDepthConsole
+#         ;;
+#       *)
+#         echo "Invalid option '$1'"
+#         return 1
+#     esac
+#   else
+#     echo "You are not currently in the monorepo."
+#   fi
+# }
