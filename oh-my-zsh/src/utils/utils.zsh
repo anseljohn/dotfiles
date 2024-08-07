@@ -61,6 +61,11 @@ err() {
   fi
 }
 
+rp() {
+  echo "Running '$1'"
+  eval $1
+}
+
 # COLORS
 # Reset
 Color_Off='\033[0m'       # Text Reset

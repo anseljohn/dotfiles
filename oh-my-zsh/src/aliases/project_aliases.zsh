@@ -8,31 +8,23 @@ isMonorepo() {
     fi
 }
 
-alias _dracoConverter=$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter
 drcconv() {
   infapps="$MONOREPO/bazel-bin/argeo/infinitam/Apps"
   if [ -d $infapps ] && [[ -f $infapps/DracoConverter ]];
   then
     args=()
-    deletePrev=false
+    base64="no"
     for arg in "$@"; do
       case "$arg" in
-        "-d")
-          deletePrev=true
+        "-base64")
+          base64="yes"
           ;;
         *)
           args+="$arg"
       esac
     done
-
-    if [[ "$deletePrev" == true ]]; 
-    then 
-      cd ${args[3]}
-      rm -f fromblob.bin  fromblob.fbx  fromblob.glb  fromblob.gltf outMesh.bin   outMesh.fbx   outMesh.glb   outMesh.gltf
-      back
-    fi
-
-    _dracoConverter $args
+    _dracoConverter="$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter"
+    rp "$_dracoConverter $base64 $args"
   else
     if [[ "$1" == "--build" ]];
     then
@@ -55,11 +47,11 @@ drcconv() {
 build() {
     if isMonorepo ;
     then
-      bb='bazel build'
+      bb='bazel build '
       opts=''
       target=''
-      scankit=' -- //argeo/scaniverse/ScanKit/ScanKit/'
-      infinitam=' -- //argeo/infinitam/'
+      scankit='-- //argeo/scaniverse/ScanKit/ScanKit/'
+      infinitam='-- //argeo/infinitam/'
       case $1 in
         '--debug')
           opts+=' --config debug'
@@ -76,6 +68,7 @@ build() {
           ;;
         'converter')
           target+=$infinitam'Apps:DracoConverter'
+          opts+="--copt=-DVOXEL_HAS_RGB "
           ;;
         'multidepth')
           target+=$infinitam'Apps:MultiDepthConsole'
@@ -124,8 +117,7 @@ prepScan() {
           echo "Invalid output."
           echo "Usage: prepScan <path/to/scan.tgz> <path/to/output/folder>"
         else
-          bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $1 \
-            --output $2 $3 $4 $5
+          rp "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan $1 --output ${@:2}"
         fi
     esac
   else
@@ -162,14 +154,16 @@ trainSplats() {
         echo "Invalid output directory."
         echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
       else
-        bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:TrainSplats \
-          $1 \
-          --output $2 \
-          --useDensePoints \
-          --disableExposureModel \
-          --useAppPhases \
-          --renderInterval 10 \
-          --pos 0.4,0,0 --target 0,0,-5
+        leftovers=${@:3:${#}}
+        echo $leftovers
+        rp "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:TrainSplats \\
+        $1 \\
+        --output $2 \\
+        --useDensePoints \\
+        --disableExposureModel \\
+        --useAppPhases \\
+        --renderInterval 10 \\
+        --pos 0.4,0,0 --target 0,0,-5 $leftovers"
       fi
   esac
 }
@@ -201,8 +195,8 @@ renderSplats() {
       fi
       ;;
     *)
-      bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats \
-        $@
+      args=$@
+      rp "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats $args"
   esac
 }
 
