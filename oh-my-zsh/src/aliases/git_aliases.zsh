@@ -62,9 +62,7 @@ push() {
       git push origin HEAD:$branch --force
       ;;
     "aliases")
-      cd ~/.oh-my-john
-      gselect
-      push_aliases
+      push_aliases $2
       ;;
     "vim")
       push_vim
@@ -79,20 +77,35 @@ push_aliases() {
   cd $OMJ_HOME
   success=$(git status 2>/dev/null)
 
-  if [[ $success == *"nothing to commit"* ]];
-  then
-    echo "No alias updates to push."
-    back
-    return
-  fi
+  case "$1" in
+    "")
+      if [[ $success == *"nothing to commit"* ]];
+      then
+        echo "No alias updates to push."
+        back
+        return
+      fi
+      echo "Pushing alias changes..."
+      add . &>/dev/null
 
-  echo "Pushing alias changes..."
-  add . &>/dev/null
+      ;;
+    "-s")
+      gselect
+      ;;
+    *)
+      err "Invalid argument: $1"
+      echo "Syntax: push aliases <opts>"
+      echo "Options:"
+      echo "  -s: stage changes"
+      echo "  <empty>: auto push"
+  esac
+
   commit 'Update aliases' &>/dev/null
+  staged=$(git status 2>/dev/null)
   nullput "push"
   success=$(git status 2>/dev/null)
 
-  if [[ $success == *"nothing to commit"* ]];
+  if [[ $success == *"nothing to commit"* ]] || [[ $staged == *"Changes to be committed"* ]];
   then
     succ "Pushed alias changes."
   else
@@ -100,7 +113,6 @@ push_aliases() {
     echo "Output:"
     echo "$success"
   fi
-
   back
 }
 
