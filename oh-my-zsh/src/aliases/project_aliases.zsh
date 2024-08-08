@@ -8,9 +8,11 @@ isMonorepo() {
     fi
 }
 
+alias emono="code $MONOREPO"
+
 drcconv() {
-  infapps="$MONOREPO/bazel-bin/argeo/infinitam/Apps"
-  if [ -d $infapps ] && [[ -f $infapps/DracoConverter ]];
+  inf="$MONOREPO/bazel-bin/argeo/infinitam"
+  if [ -d $inf ] && [[ -f $inf/draco_converter ]];
   then
     args=()
     base64="no"
@@ -23,7 +25,7 @@ drcconv() {
           args+="$arg"
       esac
     done
-    _dracoConverter="$MONOREPO/bazel-bin/argeo/infinitam/Apps/DracoConverter"
+    _dracoConverter="$MONOREPO/bazel-bin/argeo/infinitam/draco_converter"
     rp "$_dracoConverter $base64 $args"
   else
     if [[ "$1" == "--build" ]];
@@ -48,14 +50,23 @@ build() {
     if isMonorepo ;
     then
       bb='bazel build '
-      opts=''
       target=''
       scankit='-- //argeo/scaniverse/ScanKit/ScanKit/'
-      infinitam='-- //argeo/infinitam/'
+      infinitam='-- //argeo/infinitam'
       case $1 in
         '--debug')
           opts+=' --config debug'
           target+=$scankit'Neural/...'
+          ;;
+        'infinitam')
+          cd argeo/infinitam
+          ./bazel-build.sh
+          back
+          ;;
+        'massf')
+          cd argeo/mapping-framework
+          ./bazel-build.sh
+          back
           ;;
         'pipeline')
           target+=$scankit'Pipeline/...'
@@ -66,22 +77,12 @@ build() {
         'scankit')
           target+=$scankit'...'
           ;;
-        'converter')
-          target+=$infinitam'Apps:DracoConverter'
-          opts+="--copt=-DVOXEL_HAS_RGB "
-          ;;
-        'multidepth')
-          target+=$infinitam'Apps:MultiDepthConsole'
-          ;;
-        'meshcomparer')
-          target+=$infinitam'Apps:MeshComparer'
-          ;;
         'rendersplats')
           target+=$scankit'Neural:RenderSplats'
           ;;
         '--targets')
           echo "Available targets:"
-          echo "[pipeline, neural, scankit, converter, multidepth, meshcomparer, rendersplats]"
+          echo "[infinitam, massf, pipeline, neural, scankit, rendersplats]"
           echo "ex."
           echo "$ build neural"
           return 1
@@ -94,6 +95,7 @@ build() {
         ;;
 
       esac
+      opts=${@:2}" "
       fs=$bb$opts$target
       echo "Running '$fs'"
       eval $fs
