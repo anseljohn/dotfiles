@@ -62,6 +62,8 @@ push() {
       git push origin HEAD:$branch --force
       ;;
     "aliases")
+      cd ~/.oh-my-john
+      gselect
       push_aliases
       ;;
     "vim")
