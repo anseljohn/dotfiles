@@ -25,8 +25,24 @@ drcconv() {
           args+="$arg"
       esac
     done
-    _dracoConverter="$MONOREPO/bazel-bin/argeo/infinitam/draco_converter"
-    rp "$_dracoConverter $base64 $args"
+
+    use_draco=false
+    for arg in "${args[@]}"; do
+      if [[ "${$(basename $arg)##*.}" == "ply" ]];
+      then
+        use_draco=true
+        break
+      fi
+    done
+
+    if [ "$use_draco" = true ];
+    then
+      echo "$DEV/tools/draco/Users/johnanselmo/dev/tools/draco/build_dir/draco_decoder -i $1 -o $2"
+    else
+      _dracoConverter="$MONOREPO/bazel-bin/argeo/infinitam/draco_converter"
+      echo "$_dracoConverter $base64 $args"
+    fi
+
   else
     if [[ "$1" == "--build" ]];
     then
