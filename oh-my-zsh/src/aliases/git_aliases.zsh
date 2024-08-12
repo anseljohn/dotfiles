@@ -40,7 +40,6 @@ branch() {
     "list")
       git branch
       ;;
-      ;;
     "delete")
       git branch -D $2
       ;;
