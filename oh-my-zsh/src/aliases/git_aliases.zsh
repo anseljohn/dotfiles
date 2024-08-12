@@ -166,8 +166,8 @@ push_vim() {
 pull_aliases() {
   cd $OMJ_HOME
   pull &>/dev/null
-  succ "Aliases updated."
   back
+  succ "Aliases updated."
   reload
   succ "Zsh reloaded."
 }
