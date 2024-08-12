@@ -25,8 +25,8 @@ stash() {
     "")
       git stash
       ;;
-    "list")
-      git stash list
+    "list"|"show")
+      git stash $@
       ;;
     *)
       git stash push -m $1

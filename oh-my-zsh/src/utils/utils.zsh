@@ -15,7 +15,23 @@ ealias() {
       ;;
     *)
       err "Invalid syntax."
+      echo "Description: Open the oh-my-john aliases directory in vim or vscode."
       echo "Syntax: ealias <code>"
+  esac
+}
+
+edot() {
+  case $1 in
+    "")
+      vim $OMJ_HOME
+      ;;
+    "code")
+      code  $OMJ_HOME
+      ;;
+    *)
+    err "Invalid syntax."
+    echo "Description: Open the dotfiles directory in vim or vscode."
+    echo "Syntax: edot <code>"
   esac
 }
 
