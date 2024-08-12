@@ -55,7 +55,7 @@ dk() {
           back
           ;;
         "")
-          docker run --gpus all --name massf -it tesp:main
+          docker run --gpus all --name massf -it test:main
           ;;
         *)
           docker start $2
