@@ -164,31 +164,19 @@ push_vim() {
 
 pull_aliases() {
   cd $OMJ_HOME
-
-  if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
-  then
-    echo "Aliases are up to date."
-  else
-    pull &>/dev/null
-    succ "Aliases updated."
-    reload
-    succ "Zsh reloaded."
-  fi
+  pull &>/dev/null
+  succ "Aliases updated."
+  reload
+  succ "Zsh reloaded."
   back
 }
 
 pull_vim() {
   cd $OMJ_HOME
-
-  if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
-  then
-    echo "Vim config is up to date."
-  else
-    pull &>/dev/null
-    rm -rf ~/.config/nvim/init.lua
-    cp nvim/init.lua ~/.config/nvim/
-    succ "neovim init updated."
-  fi
+  pull &>/dev/null
+  rm -rf ~/.config/nvim/init.lua
+  cp nvim/init.lua ~/.config/nvim/
+  succ "neovim init updated."
   back
 }
 
