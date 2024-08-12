@@ -3,7 +3,7 @@ dk() {
     "list" )
       if [[ $(docker ps -q) ]];
       then
-        docker ps -q
+        docker ps -a
         return 0
       else
         echo "No docker containers running."
