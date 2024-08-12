@@ -61,6 +61,27 @@ drcconv() {
 
 }
 
+build_with_script() {
+  case $1 in
+    "infinitam"|"mapping-framework")
+      cd argeo/$1
+      case $2 in
+        "")
+          ./bazel-build.sh
+          ;;
+        "cuda")
+          ./bazel-build-cuda.sh
+          ;;
+        *)
+          err "Invalid option '$2'"
+      esac
+      back
+      ;;
+    *)
+      err "Invalid option '$1'"
+  esac
+}
+
 # Project stuff
 build() {
     if isMonorepo ;
@@ -75,14 +96,10 @@ build() {
           target+=$scankit'Neural/...'
           ;;
         'infinitam')
-          cd argeo/infinitam
-          ./bazel-build.sh
-          back
+          build_with_script infinitam $2
           ;;
         'massf')
-          cd argeo/mapping-framework
-          ./bazel-build.sh
-          back
+          build_with_script mapping-framework $2
           ;;
         'pipeline')
           target+=$scankit'Pipeline/...'
