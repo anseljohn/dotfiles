@@ -168,8 +168,8 @@ pull_aliases() {
   pull &>/dev/null
   back
   succ "Aliases updated."
+  succ "Zsh reloded."
   reload
-  succ "Zsh reloaded."
 }
 
 pull_vim() {
