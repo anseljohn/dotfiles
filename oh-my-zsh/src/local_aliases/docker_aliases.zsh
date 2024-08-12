@@ -3,6 +3,9 @@ dk() {
     "list" )
 
       case $2 in
+        "")
+          docker ps -q
+          ;;
         "-a")
           if [[ $(docker ps -a) ]];
           then
@@ -14,7 +17,9 @@ dk() {
           fi
           ;;
         *)
-          docker ps -q
+          err "Invalid arguments."
+          echo "Syntax: dr list [-a]"
+          ;;
       esac
       ;;
     "enter" )
