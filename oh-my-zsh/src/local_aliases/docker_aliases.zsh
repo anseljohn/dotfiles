@@ -6,7 +6,7 @@ dk() {
         "")
           docker ps -a
           ;;
-        "on")
+        "-a")
           if [[ $(docker ps -q) ]];
           then
             docker ps -q
@@ -18,7 +18,7 @@ dk() {
           ;;
         *)
           err "Invalid arguments."
-          echo "Syntax: dr list [-q]"
+          echo "Syntax: dr list [-a]"
           ;;
       esac
       ;;
