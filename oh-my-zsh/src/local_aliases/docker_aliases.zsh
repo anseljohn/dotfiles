@@ -34,8 +34,11 @@ dk() {
           ./init_cuda_docker_dev_env.sh /home/johnanselmo_nianticlabs_com/dev/niantic ~/dev/niantic
           back
           ;;
+        "")
+          docker run --gpus all --name massf -it tesp:main
+          ;;
         *)
-          docker run --gpus all --name massf -it test:main
+          docker start $2
       esac
       ;;
     "build" )
