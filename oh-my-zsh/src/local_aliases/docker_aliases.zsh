@@ -1,14 +1,21 @@
 dk() {
   case "$1" in
     "list" )
-      if [[ $(docker ps -q) ]];
-      then
-        docker ps -a
-        return 0
-      else
-        echo "No docker containers running."
-        return 1
-      fi
+
+      case $2 in
+        "-a")
+          if [[ $(docker ps -a) ]];
+          then
+            docker ps -a
+            return 0
+          else
+            echo "No docker containers running."
+            return 1
+          fi
+          ;;
+        *)
+          docker ps -q
+      esac
       ;;
     "enter" )
       if [ $# -eq 2 ];
