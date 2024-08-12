@@ -64,7 +64,7 @@ drcconv() {
 build_with_script() {
   case $1 in
     "infinitam"|"mapping-framework")
-      cd argeo/$1
+      cd $MONOREPO/argeo/$1
       case $2 in
         "")
           ./bazel-build.sh
