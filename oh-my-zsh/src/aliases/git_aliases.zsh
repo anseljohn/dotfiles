@@ -12,7 +12,6 @@ alias pop='git stash pop'
 alias rebase='git rebase'
 alias add='git add'
 alias branch='git rev-parse --abbrev-ref HEAD'
-alias branches='git branch'
 alias merge='git merge'
 alias check='git checkout'
 
@@ -30,6 +29,25 @@ stash() {
       ;;
     *)
       git stash push -m $1
+      ;;
+  esac
+}
+
+branch() {
+  case $1 in
+    "")
+      git rev-parse --abbrev-ref HEAD
+      ;;
+    "list")
+      git branch
+      ;;
+      ;;
+    "delete")
+      git branch -D $2
+      ;;
+    *)
+      err "Invalid argument: $1"
+      echo "Syntax: branch <list|delete>"
       ;;
   esac
 }
