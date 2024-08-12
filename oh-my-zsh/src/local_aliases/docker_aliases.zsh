@@ -4,12 +4,12 @@ dk() {
 
       case $2 in
         "")
-          docker ps -q
+          docker ps -a
           ;;
-        "-a")
-          if [[ $(docker ps -a) ]];
+        "on")
+          if [[ $(docker ps -q) ]];
           then
-            docker ps -a
+            docker ps -q
             return 0
           else
             echo "No docker containers running."
@@ -18,7 +18,7 @@ dk() {
           ;;
         *)
           err "Invalid arguments."
-          echo "Syntax: dr list [-a]"
+          echo "Syntax: dr list [-q]"
           ;;
       esac
       ;;
