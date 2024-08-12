@@ -25,7 +25,15 @@ dk() {
     "enter" )
       if [ $# -eq 2 ];
       then
-        docker exec -it $2 bash
+        if [[ $(docker ps -q) == *"$2"* ]];
+        then
+          echo "Entering container #$2..."
+          docker exec -lt $2 zsh
+        else
+          echo "Container #$2 is not running. Attemping to start..."
+          dk start $2 
+          dk enter $2
+        fi
       else
         err "Invalid arguments."
         echo "Syntax: dr enter <Container-ID>"
