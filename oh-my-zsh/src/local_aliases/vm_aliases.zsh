@@ -10,18 +10,18 @@ VM_COMMAND="gcloud compute ssh $VM_NAME --project=corp-work-machines --zone=us-w
 vm() {
   if [[ "$1" == "project" ]];
   then
-    echo "Your VM project name is: $VM_PROJECT_NAME"
+    echo "$VM_PROJECT_NAME"
   elif [[ "$1" == "machine" ]];
   then
-    echo "Your VM name is: $VM_NAME"
+    echo " $VM_NAME"
   elif [[ "$1" == "zone" ]];
   then
-    echo "Your VM zone is: $VM_ZONE"
+    echo "$VM_ZONE"
   elif [[ "$1" == "command" ]];
   then
-    echo "The command called for vm ssh is: $VM_COMMAND"
+    echo "$VM_COMMAND"
   else
-    gcloud compute ssh johnanselmo-ubuntu-focal --project=corp-work-machines --zone=us-west1-b
+    eval "$VM_COMMAND"
   fi
 }
 
