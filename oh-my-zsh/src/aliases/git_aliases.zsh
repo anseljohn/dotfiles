@@ -167,9 +167,7 @@ pull_aliases() {
   cd $OMJ_HOME
   pull &>/dev/null
   back
-  succ "Aliases updated."
-  succ "Zsh reloded."
-  echo "peepee"
+  succ "Aliases updated, zsh reloaded."
   reload
 }
 
