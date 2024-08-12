@@ -124,6 +124,7 @@ push_aliases() {
 
   if [[ $success == *"nothing to commit"* ]] || [[ $staged == *"Changes to be committed"* ]] || [[ $staged == *"Changes not staged for commit"* ]];
   then
+    echo "test"
     succ "Pushed alias changes."
   else
     err "Failed to push updated aliases."
