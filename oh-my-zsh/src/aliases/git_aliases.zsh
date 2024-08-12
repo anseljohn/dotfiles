@@ -107,6 +107,7 @@ push_aliases() {
       echo "Options:"
       echo "  -s: stage changes"
       echo "  <empty>: auto push"
+      return
       ;;
     *)
       err "Invalid argument: $1"
