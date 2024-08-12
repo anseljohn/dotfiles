@@ -25,14 +25,17 @@ dk() {
           dk stop all
           dk start
           ;;
-        "rebuild" )
+        "rebuild")
           dk build
           dk start
           ;;
-        *)
+        "cuda")
           cd $MONOREPO/argeo/docker-mapping-dev-env
           ./init_cuda_docker_dev_env.sh /home/johnanselmo_nianticlabs_com/dev/niantic ~/dev/niantic
           back
+          ;;
+        *)
+          docker run --gpus all --name massf -it test:main
       esac
       ;;
     "build" )
