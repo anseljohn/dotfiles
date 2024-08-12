@@ -73,6 +73,17 @@ push() {
   esac
 }
 
+pull() {
+  case $1 in
+    "aliases")
+      pull_aliases
+      ;;
+    *)
+      git pull $@
+      ;;
+  esac
+}
+
 push_aliases() {
   cd $OMJ_HOME
   success=$(git status 2>/dev/null)
@@ -91,6 +102,12 @@ push_aliases() {
       ;;
     "-s")
       gselect
+      ;;
+    "help")
+      echo "Syntax: push aliases <opts>"
+      echo "Options:"
+      echo "  -s: stage changes"
+      echo "  <empty>: auto push"
       ;;
     *)
       err "Invalid argument: $1"
