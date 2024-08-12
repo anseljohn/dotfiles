@@ -131,7 +131,7 @@ dk() {
 
       ;;
     * )
-      docker $1
+      docker $@
   esac
 }
 
