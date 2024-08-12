@@ -28,7 +28,7 @@ dk() {
         if [[ $(docker ps -q) == *"$2"* ]];
         then
           echo "Entering container #$2..."
-          docker exec -it $2 zsh
+          docker exec -it $2 bash
         else
           echo "Container #$2 is not running. Attemping to start..."
           dk start $2 
