@@ -75,7 +75,6 @@ build_with_script() {
         *)
           err "Invalid option '$2'"
       esac
-      back
       ;;
     *)
       err "Invalid option '$1'"
