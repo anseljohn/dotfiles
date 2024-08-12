@@ -37,8 +37,8 @@ edot() {
 
 # To Dirs
 alias mono="cd $MONOREPO"
-alias massf="cd $MONOREPO/argeo/mapping-framework"
-alias infinitam="cd $MONOREPO/argeo/infinitam"
+alias massf="cd $MASSF"
+alias infinitam="cd $INFINITAM"
 alias dev="cd $DEV"
 alias down="cd $USERD/Downloads"
 alias back="cd - > /dev/null"

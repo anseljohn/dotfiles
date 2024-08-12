@@ -8,6 +8,8 @@ declare -a alias_locs=($ALIAS_LOC $LOCAL_ALIAS_LOC)
 
 DEV="$USERD/dev"
 MONOREPO="$DEV/niantic"
+MASSF="$MONOREPO/argeo/mapping-framework"
+INFINITAM="$MONOREPO/argeo/infinitam"
 MESHING37="$DEV/data/meshing37"
 VIM_CONFIG="$USERD/.config/nvim/init.lua"
 ALIASES="$USERD/.oh-my-zsh/custom/aliases.zsh"
