@@ -12,6 +12,7 @@ alias pop='git stash pop'
 alias rebase='git rebase'
 alias add='git add'
 alias branch='git rev-parse --abbrev-ref HEAD'
+alias branches='git branch'
 alias merge='git merge'
 alias check='git checkout'
 
