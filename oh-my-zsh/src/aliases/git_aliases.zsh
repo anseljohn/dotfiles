@@ -154,7 +154,9 @@ pull_aliases() {
     echo "Aliases are up to date."
   else
     pull &>/dev/null
-    succ "aliases updated."
+    succ "Aliases updated."
+    reload
+    succ "Zsh reloaded."
   fi
   back
 }
