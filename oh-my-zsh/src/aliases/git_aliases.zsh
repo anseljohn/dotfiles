@@ -169,6 +169,7 @@ pull_aliases() {
   back
   succ "Aliases updated."
   succ "Zsh reloded."
+  echo "peepee"
   reload
 }
 
