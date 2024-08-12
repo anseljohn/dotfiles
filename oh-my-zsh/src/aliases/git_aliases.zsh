@@ -178,7 +178,7 @@ pull_aliases() {
 }
 
 pull_vim() {
-  cd $DEV/dotfiles/
+  cd $OMJ_HOME
 
   if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
   then
