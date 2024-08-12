@@ -122,7 +122,7 @@ push_aliases() {
   nullput "push"
   success=$(git status 2>/dev/null)
 
-  if [[ $success == *"nothing to commit"* ]] || [[ $staged == *"Changes to be committed"* ]];
+  if [[ $success == *"nothing to commit"* ]] || [[ $staged == *"Changes to be committed"* ]] || [[ $staged == *"Changes not staged for commit"* ]];
   then
     succ "Pushed alias changes."
   else
