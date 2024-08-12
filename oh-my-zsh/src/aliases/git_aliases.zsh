@@ -179,7 +179,6 @@ pull_aliases() {
 
 pull_vim() {
   cd $OMJ_HOME
-  echo "test"
 
   if [[ $(git fetch --dry-run 2>/dev/null) == "" ]];
   then
