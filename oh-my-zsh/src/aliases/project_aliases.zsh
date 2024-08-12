@@ -96,11 +96,11 @@ build() {
           target+=$scankit'Neural/...'
           ;;
         'infinitam')
-          build_with_script infinitam
+          build_with_script infinitam $2
           return
           ;;
         'massf')
-          build_with_script mapping-framework
+          build_with_script mapping-framework $2
           return
           ;;
         'pipeline')
