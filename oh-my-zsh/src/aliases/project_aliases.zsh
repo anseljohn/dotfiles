@@ -9,6 +9,7 @@ isMonorepo() {
 }
 
 alias emono="code $MONOREPO"
+alias multidepth_console="$MONOREPO/bazel-bin/argeo/infinitam/multidepth_console"
 
 drcconv() {
   inf="$MONOREPO/bazel-bin/argeo/infinitam"
@@ -287,7 +288,37 @@ benchmark() {
   fi
 }
 
-alias createmesh="python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py"
+createmesh() {
+  inf="$MONOREPO/bazel-bin/argeo/infinitam"
+
+  if [[ "$1" == *".txt"* ]];
+  then
+    python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py --config_file_path $1
+  elif [[ $# -ge 2 ]];
+  then
+    if [ -d $inf ] && [[ -f $inf/multidepth_console ]];
+    then
+    multidepth_console $NETS $1 $2
+      case "$3" in
+        "highres_color")
+          find . ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
+          ;;
+        "")
+          continue
+          ;;
+        *)
+          err "Invalid option '$3'"
+      esac
+    else
+      err "MultiDepthConsole app is not built."
+    fi
+  else
+    err "Invalid number of arguments."
+    echo "Usage:"
+    echo "\tcreatemesh <path/to/config.txt>"
+    echo "\tcreatemesh <path/to/sequence.tgz> <path/to/output/folder>"
+  fi
+}
 # renderSplats ~/prepped_scan_splat/step04200/model.ply --renderDepthBins --cameraPath --useCameras --rootPath ~/20211122-133753_560ae00e-9dfa-4494-9c23-5419210fe1c3_1_of_1.tgz --datasetType recorder_v2
 # rendersplats: ply, 
 # multidepth() {
