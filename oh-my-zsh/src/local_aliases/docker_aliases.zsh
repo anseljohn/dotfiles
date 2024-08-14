@@ -64,6 +64,7 @@ dk() {
     "build" )
       cd $MONOREPO/argeo/docker-mapping-dev-env
       ./make_cuda_docker_dev_env.sh $2
+      back
       ;;
     "stop" )
       if [ $# -eq 2 ];
