@@ -54,6 +54,11 @@ dk() {
           ./init_cuda_docker_dev_env.sh /home/johnanselmo_nianticlabs_com/dev/niantic ~/dev/niantic
           back
           ;;
+        "test:main")
+          cd $MASSF
+          ./deploy.sh --cuda test --tag main  
+          back
+          ;;
         "")
           docker run --gpus all --name massf -it test:main
           ;;
