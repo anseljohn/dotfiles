@@ -298,13 +298,27 @@ createmesh() {
   then
     if [ -d $inf ] && [[ -f $inf/multidepth_console ]];
     then
-    multidepth_console $NETS $1 $2
+      outdir=$2
+      if [[ "$2" == *".ply" ]];
+      then
+        outdir=$(dirname $2)
+      fi
+      multidepth_console $NETS $1 $outdir
+
       case "$3" in
         "highres_color")
-          find . ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
+          find . -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
           ;;
         "")
-          continue
+          if [[ "$2" == *".ply" ]];
+          then
+            echo "ply found"
+            find . ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
+            drcconv lidar_highres_color_mesh_0.drc $2
+            rm -rf lidar_highres_color_mesh_0.drc
+          else
+            continue
+          fi
           ;;
         *)
           err "Invalid option '$3'"
@@ -319,26 +333,25 @@ createmesh() {
     echo "\tcreatemesh <path/to/sequence.tgz> <path/to/output/folder>"
   fi
 }
-# renderSplats ~/prepped_scan_splat/step04200/model.ply --renderDepthBins --cameraPath --useCameras --rootPath ~/20211122-133753_560ae00e-9dfa-4494-9c23-5419210fe1c3_1_of_1.tgz --datasetType recorder_v2
-# rendersplats: ply, 
-# multidepth() {
-#   if isMonorepo ;
-#   then
-#     case "$1" in
-#       "-h")
-#         echo "multidepth: Runs the MultiDepthConsole app."
-#         echo "Usage: multidepth <opts> "
-#         echo "Options:"
-#         echo "\t-h: Display this help message."
-#         ;;
-#       "")
-#         bazel run -- //argeo/infinitam/Apps:MultiDepthConsole
-#         ;;
-#       *)
-#         echo "Invalid option '$1'"
-#         return 1
-#     esac
-#   else
-#     echo "You are not currently in the monorepo."
-#   fi
-# }
+
+m37() {
+  case $1 in
+    "-d")
+      if [[ "$2" == "" ]];
+      then
+        err "Invalid output directory."
+        echo "Syntax: m37 -d <path/to/output/folder>"
+      else
+        rm -rf $DEV/data/meshing_from_splats
+        m37 ${@:2}
+      fi
+      ;;
+    *)
+      call="python3 $OH_MY_JOHN/meshing37_utils.py $1 $MESHING37"
+      if [[ "$2" != "" ]];
+      then
+        call="$call $2"
+      fi
+      eval "$call"
+  esac
+}
