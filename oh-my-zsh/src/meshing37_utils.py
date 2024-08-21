@@ -1,9 +1,16 @@
-import glob
 import os
 import re
 import shutil
+import subprocess
 
-global meshing37_dir, out_gt_dir, out_seq_dir
+global splat_dir, meshing37_dir, out_dir, out_gt_dir, out_seq_dir
+
+render_args = [
+  "--renderDepthBins",
+  "--cameraPath",
+  "--useCameras",
+  "--datasetType recorder_v2"
+]
 
 def between(start, s, end, keep_delims=False, keep_start=False, keep_end=False):
   btwn = re.search(start+'(.*)'+end, s).group(1)
@@ -14,13 +21,13 @@ def between(start, s, end, keep_delims=False, keep_start=False, keep_end=False):
 
   return btwn
 
-def getMeshing37Filename(full_filename):
+def get_meshing37_filename(full_filename):
   if ".tgz" in full_filename:
     return between("", full_filename, ".tgz", keep_end=True)
   else:
     return None
   
-def validateSequence(sequence):
+def validate_sequence(sequence):
   # If sequence exists both in meshing37 sequences and gt meshes then return true, else false
   for filename in os.listdir(meshing37_dir + "/gtMeshes/"):
     if sequence in filename:
@@ -32,9 +39,8 @@ def validateSequence(sequence):
 def makedirs(path):
   os.makedirs(path, exist_ok=True)
 
-def setupMeshingDatasetFromSplats(splat_dir, out_dir):
+def setup_meshing_dataset_from_splats():
   if not os.path.exists(out_dir):
-    print("Making directory " + out_dir)
     makedirs(out_dir)
     makedirs(out_gt_dir)
     makedirs(out_seq_dir)
@@ -48,8 +54,8 @@ def setupMeshingDatasetFromSplats(splat_dir, out_dir):
 
   all_sequences = []
   for filename in os.listdir(splat_dir):
-    m37name = getMeshing37Filename(filename)
-    if m37name is not None and validateSequence(m37name):
+    m37name = get_meshing37_filename(filename)
+    if m37name is not None and validate_sequence(m37name):
       # Add sequence to list of all sequences
       all_sequences.append(m37name)
       
@@ -72,20 +78,58 @@ def setupMeshingDatasetFromSplats(splat_dir, out_dir):
   #     else:
   #       print("Not a tgz")
 
+def mass_render_splats(filetype="spz", inner_sequence_id="step04200"):
+  render_root = "/var/tmp/mass_render_splats/"
+  if os.path.exists(render_root):
+    shutil.rmtree(render_root)
+  makedirs(render_root)
+  
+  for filename in os.listdir(splat_dir):
+    m37_name = get_meshing37_filename(filename)
+    if m37_name is not None:
+      makedirs(render_root + m37_name + "/")
+
+      splat = splat_dir + "/" + filename + "/" + inner_sequence_id + "/model." + filetype
+
+      cmd = "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:RenderSplats " \
+            + splat + " " + " ".join(render_args) \
+            + " --rootPath " + meshing37_dir + "/sequences/" + m37_name + "/" \
+            + " --output " + render_root + m37_name + "/"
+      subprocess.run(cmd, shell=True, executable="/bin/zsh") 
 
 if __name__ == "__main__":
   args = os.sys.argv[1:]
 
-  if len(args) < 2:
-    print("Usage: python meshing37_utils.py splat_dir meshing37_dir [out_dir]")
+  if len(args) < 1:
+    print("Usage: python3 meshing37_utils.py setup splat_dir meshing37_dir (out_dir)")
+    print("Usage: python3 meshing37_utils.py render splat_dir meshing37_dir")
     exit(1)
 
-  meshing37_dir = args[1]
+  # setup_meshing_dataset_from_splats()
+  match args[0]:
+    case "setup":
+      if len(args) < 3:
+        print("Usage: python3 meshing37_utils.py render splat_dir meshing37_dir (out_dir)")
+        exit(1)
 
-  out_dir = "/Users/johnanselmo/dev/data/meshing_from_splats/"
-  if len(args) == 3:
-    out_dir = args[2]
-  out_gt_dir = out_dir + "gtMeshes/"
-  out_seq_dir = out_dir + "sequences/"
+      splat_dir = args[1]
+      meshing37_dir = args[2]
 
-  setupMeshingDatasetFromSplats(args[0], out_dir)
+      out_dir = "/Users/johnanselmo/dev/data/meshing_from_splats/"
+      if len(args) == 4:
+        out_dir = args[3]
+      out_gt_dir = out_dir + "gtMeshes/"
+      out_seq_dir = out_dir + "sequences/"
+
+      setup_meshing_dataset_from_splats()
+    case "render":
+      if len(args) < 2:
+        print("Usage: python3 meshing37_utils.py render splat_dir meshing37_dir")
+
+      splat_dir = args[1]
+      meshing37_dir = args[2]
+
+      mass_render_splats()
+    case _:
+      print("Invalid command")
+      exit(1)

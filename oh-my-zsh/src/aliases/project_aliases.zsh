@@ -207,7 +207,7 @@ trainSplats() {
 }
 
 renderSplats() {
-  if [ "$@" -lt 1 ] || [ "$@" -gt 2 ];
+  if [ "$#" -lt 1 ] || [ "$#" -gt 2 ];
   then
     echo "Invalid syntax."
     echo "Usage: renderSplats <opts> </path/to/model.ply>"
@@ -231,6 +231,9 @@ renderSplats() {
       else
         renderSplats ${@:2}
       fi
+      ;;
+    "mass")
+      python3 $OH_MY_JOHN/meshing37_utils.py render $2 $MESHING37
       ;;
     *)
       args=$@
@@ -342,12 +345,18 @@ m37() {
         err "Invalid output directory."
         echo "Syntax: m37 -d <path/to/output/folder>"
       else
-        rm -rf $DEV/data/meshing_from_splats
+        if [[ "$3" == "" ]];
+        then
+          rm -rf $DEV/data/meshing_from_splats
+        else
+          rm -rf $3
+        fi
+
         m37 ${@:2}
       fi
       ;;
     *)
-      call="python3 $OH_MY_JOHN/meshing37_utils.py $1 $MESHING37"
+      call="python3 $OH_MY_JOHN/meshing37_utils.py setup $1 $MESHING37"
       if [[ "$2" != "" ]];
       then
         call="$call $2"
