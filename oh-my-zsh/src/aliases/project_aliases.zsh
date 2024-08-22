@@ -242,12 +242,18 @@ renderSplats() {
 }
 
 copyDepths() {
-  if [ $# -lt 2 -o $# -gt 2 ];
+  if [ $# -lt 2 -o $# -gt 3r ];
   then
     err "Invalid number of arguments."
-    echo "Syntax: copyDepths <path/to/RenderSplatsOutput> <path/to/RecorderV2Scan>"
+    echo "Syntax: copyDepths (mass) <path/to/RenderSplatsOutput> <path/to/RecorderV2Scan>"
   else
-    python3 $MASSF/tools/scripts/meshing_tools/copy_splat_depths_to_v2.py $1 $2
+    case "$1" in
+      "mass")
+        python3 $OH_MY_JOHN/meshing37_utils.py copyDepths $2 $3 $MASSF
+        ;;
+      *)
+        python3 $MASSF/tools/scripts/meshing_tools/copy_splat_depths_to_v2.py $1 $2
+    esac
   fi
 
 }
@@ -296,39 +302,31 @@ createmesh() {
 
   if [[ "$1" == *".txt"* ]];
   then
-    python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py --config_file_path $1
+    # python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py --config_file_path $1
+    python3 $OH_MY_JOHN/meshing37_utils.py create $inf $1
   elif [[ $# -ge 2 ]];
   then
-    if [ -d $inf ] && [[ -f $inf/multidepth_console ]];
-    then
-      outdir=$2
-      if [[ "$2" == *".ply" ]];
-      then
-        outdir=$(dirname $2)
-      fi
-      multidepth_console $NETS $1 $outdir
+    mkdir dracotmp
+    python3 $OH_MY_JOHN/meshing37_utils.py create $inf $1 $2 $NETS
+    case "$3" in
+      "highres_color")
+        find . -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
+        ;;
+      "")
+        if [[ "$2" == *".ply" ]];
+        then
+          echo "ply found"
+          find ./dracotmp/ -type f -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -exec rm -f {} +
 
-      case "$3" in
-        "highres_color")
-          find . -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
-          ;;
-        "")
-          if [[ "$2" == *".ply" ]];
-          then
-            echo "ply found"
-            find . ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
-            drcconv lidar_highres_color_mesh_0.drc $2
-            rm -rf lidar_highres_color_mesh_0.drc
-          else
-            continue
-          fi
-          ;;
-        *)
-          err "Invalid option '$3'"
-      esac
-    else
-      err "MultiDepthConsole app is not built."
-    fi
+          drcconv lidar_highres_color_mesh_0.drc $2
+          rm -rf lidar_highres_color_mesh_0.drc
+        else
+          continue
+        fi
+        ;;
+      *)
+        err "Invalid option '$3'"
+    esac
   else
     err "Invalid number of arguments."
     echo "Usage:"
@@ -354,6 +352,14 @@ m37() {
 
         m37 ${@:2}
       fi
+      ;;
+    "config")
+      call="python3 $OH_MY_JOHN/meshing37_utils.py config"
+      if [[ "$2" != "" ]];
+      then
+        call="$call $2"
+      fi
+      eval "$call"
       ;;
     *)
       call="python3 $OH_MY_JOHN/meshing37_utils.py setup $1 $MESHING37"
