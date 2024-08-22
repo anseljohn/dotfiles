@@ -1,10 +1,10 @@
 # Sourcing
-for file in ~/.oh-my-john/oh-my-zsh/src/utils/*; do
+for file in ~/.oh-my-john/oh-my-zsh/src/utils/*.zsh; do
   source $file
 done
 
 for loc in ${alias_locs[@]}; do
-  for file in $loc/*; do
+  for file in $loc/*.zsh; do
     source $file
   done
 done

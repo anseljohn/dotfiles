@@ -12,24 +12,14 @@ alias emono="code $MONOREPO"
 alias multidepth_console="$MONOREPO/bazel-bin/argeo/infinitam/multidepth_console"
 
 drcconv() {
-  inf="$MONOREPO/bazel-bin/argeo/infinitam"
-  if [ -d $inf ] && [[ -f $inf/draco_converter ]];
-  then
-    args=()
     base64="no"
-    for arg in "$@"; do
-      case "$arg" in
-        "-base64")
-          base64="yes"
-          ;;
-        *)
-          args+="$arg"
-      esac
-    done
-
     use_draco=false
-    for arg in "${args[@]}"; do
-      if [[ "${$(basename $arg)##*.}" == "ply" ]];
+    for arg in "$@"; do
+      if [[ "$arg" == "-base64" ]];
+      then
+        base64="yes"
+        break
+      elif [[ "$arg" == *".ply"* ]];
       then
         use_draco=true
         break
@@ -38,28 +28,10 @@ drcconv() {
 
     if [ "$use_draco" = true ];
     then
-      rp "$DEV/tools/draco/build_dir/draco_decoder -i $1 -o $2"
+      python3 $DRACO $DRACO_DECODER $1 $2
     else
-      _dracoConverter="$MONOREPO/bazel-bin/argeo/infinitam/draco_converter"
-      rp "$_dracoConverter $base64 $args"
+      python3 $DRACO $DRACO_CONVERTER $1 $2 $base64
     fi
-
-  else
-    if [[ "$1" == "--build" ]];
-    then
-      cd $MONOREPO
-      build converter
-      back
-      drcconv ${@:2}
-    else
-      err "DracoConverter app is not build."
-      echo "Please run 'bazel build -- //argeo/infinitam/Apps:DracoConverter' in the monorepo."
-      echo "(You may have to add DracoConverter to the Apps BUILD file)"
-      echo "or"
-      echo "Run convdrc --build <args>"
-    fi
-  fi
-
 }
 
 build_with_script() {
@@ -298,40 +270,27 @@ benchmark() {
 }
 
 createmesh() {
-  inf="$MONOREPO/bazel-bin/argeo/infinitam"
-
   if [[ "$1" == *".txt"* ]];
   then
-    # python3 $MONOREPO/argeo/infinitam/scripts/MeshEval/mesh_create.py --config_file_path $1
-    python3 $OH_MY_JOHN/meshing37_utils.py create $inf $1
+    python3 $OH_MY_JOHN/meshing37_utils.py create $1
   elif [[ $# -ge 2 ]];
   then
-    mkdir dracotmp
-    python3 $OH_MY_JOHN/meshing37_utils.py create $inf $1 $2 $NETS
-    case "$3" in
-      "highres_color")
-        find . -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -type f -exec rm -f {} +
-        ;;
-      "")
-        if [[ "$2" == *".ply" ]];
-        then
-          echo "ply found"
-          find ./dracotmp/ -type f -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -exec rm -f {} +
-
-          drcconv lidar_highres_color_mesh_0.drc $2
-          rm -rf lidar_highres_color_mesh_0.drc
-        else
-          continue
-        fi
-        ;;
-      *)
-        err "Invalid option '$3'"
-    esac
+    python3 $OH_MY_JOHN/meshing37_utils.py create $1 $2 $NETS
   else
     err "Invalid number of arguments."
     echo "Usage:"
     echo "\tcreatemesh <path/to/config.txt>"
     echo "\tcreatemesh <path/to/sequence.tgz> <path/to/output/folder>"
+  fi
+}
+
+mesheval() {
+  if [[ $# -eq 1 ]];
+  then
+    python3 $OH_MY_JOHN/meshing37_utils.py eval $1
+  else
+    err "Invalid number of arguments."
+    echo "Usage: mesheval <path/to/config.txt>"
   fi
 }
 

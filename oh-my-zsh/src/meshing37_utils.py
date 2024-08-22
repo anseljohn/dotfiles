@@ -1,8 +1,9 @@
 import os
-from pathlib import Path
 import re
 import shutil
-import subprocess
+
+from pathlib import Path
+from utils.utils import *
 
 global splat_dir, meshing37_dir, out_dir, out_gt_dir, out_seq_dir
 
@@ -12,9 +13,6 @@ render_args = [
   "--useCameras",
   "--datasetType recorder_v2"
 ]
-
-def execute(cmd):
-  subprocess.run(cmd, shell=True, executable="/bin/zsh")
 
 def between(start, s, end, keep_delims=False, keep_start=False, keep_end=False):
   btwn = re.search(start+'(.*)'+end, s).group(1)
@@ -40,11 +38,9 @@ def validate_sequence(sequence):
           return True
   return False
 
-def makedirs(path):
-  os.makedirs(path, exist_ok=True)
 
 def setup_meshing_dataset_from_splats():
-  if not os.path.exists(out_dir):
+  if not path_exists(out_dir):
     print("Creating output directories...", end="\r")
     makedirs(out_dir)
     makedirs(out_gt_dir)
@@ -88,7 +84,7 @@ def setup_meshing_dataset_from_splats():
 
 def mass_render_splats(filetype="spz", inner_sequence_id="step04200"):
   render_root = "/var/tmp/mass_render_splats/"
-  if os.path.exists(render_root):
+  if path_exists(render_root):
     shutil.rmtree(render_root)
   makedirs(render_root)
   
@@ -134,25 +130,30 @@ def create_config():
                   +"  \"compareMeshName\": \"nn_highres_color_mesh_0.drc\"\n"\
                 +"}\n"
   config.write(config_txt)
-  print("Creating config... DONE")
+  print("Creating config2... DONE")
 
-def create_mesh(inf, input, output="", nets="", auto_convert=True):
+def create_mesh(input, output="", nets="", auto_convert=True):
+  infinitam = env("INFINITAM")
+  inf = env("MONOREPO") + "/bazel-bin/argeo/infinitam"
   multidepth = inf + "/multidepth_console"
-  if not os.path.exists(inf):
-    print("Infinitam build directory does not exist.")
-    print("Please build Infinitam before running this script.")
-    exit(1)
-  if not os.path.exists(multidepth):
-    print("Multidepth executable does not exist.")
+  if not path_exists(inf):
+    err("Infinitam build directory does not exist.")
     print("Please build Infinitam before running this script.")
     exit(1)
 
   if ".txt" in input:
-    execute("python3 " + inf + "/scripts/MeshEval/mesh_create.py --config_file_path " + input)
+    rp("python3 " + infinitam + "/scripts/MeshEval/mesh_create.py --config_file_path " + input)
   elif ".tgz" in input:
-    parent_out_dir = str(Path(output).parent.absolute()) + "/dracotmp/"
+    parent_out_dir = str(Path(output).parent.absolute()) + "/mesh_out/"
     makedirs(parent_out_dir)
-    execute("echo " + multidepth + " " + nets + " " + input + " " + parent_out_dir)
+    rp(multidepth + " " + nets + " " + input + " " + parent_out_dir)
+    # rp("find ./dracotmp/ -type f -name '*.drc' ! -name 'lidar_highres_color_mesh_0.drc' -exec rm -f {} +")
+
+def mesh_eval(config):
+  rp("python3 " + env("INFINITAM") + "/scripts/MeshEval/run_full_test.py --config_file_path " + config)
+
+
+
 
 if __name__ == "__main__":
   args = os.sys.argv[1:]
@@ -179,6 +180,8 @@ if __name__ == "__main__":
       out_seq_dir = out_dir + "/sequences/"
 
       setup_meshing_dataset_from_splats()
+
+
     case "config":
       out_dir = "/Users/johnanselmo/dev/data/meshing_from_splats/"
       if len(args) == 2:
@@ -187,6 +190,8 @@ if __name__ == "__main__":
       out_seq_dir = out_dir + "/sequences/"
 
       create_config()
+
+
     case "render":
       if len(args) < 3:
         print("Usage: python3 meshing37_utils.py render splat_dir meshing37_dir")
@@ -196,6 +201,8 @@ if __name__ == "__main__":
       meshing37_dir = args[2]
 
       mass_render_splats()
+
+
     case "copyDepths":
       if len(args) < 4:
         print("Usage: python3 meshing37_utils.py copyDepths render_root seq_root, massf_root")
@@ -203,15 +210,24 @@ if __name__ == "__main__":
       
       mass_copy_depths(args[1], args[2], args[3])
 
+
     case "create":
-      if len(args) != 3 and len(args) != 5:
-        print("Usage: python3 meshing37_utils.py create infinitam_bazel_bin config.txt")
-        print("Usage: python3 meshing37_utils.py create infinitam_bazel_bin mesh_dir.tgz out_mesh.ply folder/to/Nets")
+      if len(args) != 2 and len(args) != 4:
+        print("Usage: python3 meshing37_utils.py create config.txt")
+        print("Usage: python3 meshing37_utils.py create mesh_dir.tgz out_mesh.ply folder/to/Nets")
         exit(1)
-      elif len(args) == 3:
-        create_mesh(args[1], args[2])
+      elif len(args) == 2:
+        create_mesh(args[1])
       else:
-        create_mesh(args[1], args[2], args[3], args[4])
+        create_mesh(args[1], args[2], args[3])
+
+
+    case "eval":
+      if len(args) != 2:
+        print("Usage: python3 meshing37_utils.py eval config.txt")
+        exit(1)
+      mesh_eval(args[1])
+
 
     case _:
       print("Invalid command")
