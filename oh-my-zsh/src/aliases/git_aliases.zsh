@@ -9,10 +9,22 @@ alias subup='git submodule update --init --recursive'
 alias staged='git diff --cached'
 alias gselect='git add -p'
 alias pop='git stash pop'
-alias rebase='git rebase'
 alias add='git add'
 alias merge='git merge'
 alias check='git checkout'
+
+rebase() {
+  case "$1" in
+  "-a")
+    git fetch origin master && git rebase origin/master
+    ;;
+  "")
+    err "Please specify a branch to rebase against."
+    ;;
+  *)
+    git rebase -i $1
+  esac
+}
 
 reset() {
   git reset $@
