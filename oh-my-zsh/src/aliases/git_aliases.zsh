@@ -16,7 +16,7 @@ alias check='git checkout'
 rebase() {
   case "$1" in
   "-a")
-    git fetch origin master && git rebase origin/master
+    git fetch origin main && git rebase -i origin/main
     ;;
   "")
     err "Please specify a branch to rebase against."
