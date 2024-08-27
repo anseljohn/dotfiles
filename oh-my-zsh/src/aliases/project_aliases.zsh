@@ -34,34 +34,24 @@ drcconv() {
     fi
 }
 
-build_with_script() {
-  case $1 in
-    "infinitam"|"mapping-framework")
-      cd $MONOREPO/argeo/$1
-      case $2 in
-        "")
-          ./bazel-build.sh
-          ;;
-        "cuda")
-          ./bazel-build-cuda.sh
-          ;;
-        *)
-          err "Invalid option '$2'"
-      esac
-      back
-      ;;
-    *)
-      err "Invalid option '$1'"
-  esac
-}
 
 # Project stuff
 build() {
-  cmd="python3 $BAZEL_BUILD --project $1"
-  if [[ "$2" == "cuda" ]];
-  then
-    cmd="$cmd --cuda"
-  fi
+  cmd="python3 $BAZEL_BUILD"
+
+  case $1 in
+    "-h")
+      cmd="$cmd -h"
+      ;;
+    *)
+      cmd="$cmd $1"
+
+      if [[ "$2" == "cuda" ]];
+      then
+        cmd="$cmd --cuda"
+      fi
+      ;;
+  esac
 
   eval "$cmd"
 }
