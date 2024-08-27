@@ -50,11 +50,6 @@ build_with_script() {
       esac
       back
       ;;
-    "ScanKit")
-      cd $MONOREPO/argeo/scaniverse/$1
-      bazel build
-      back
-      ;;
     *)
       err "Invalid option '$1'"
   esac
@@ -88,7 +83,7 @@ build() {
           target+=$scankit'Neural/...'
           ;;
         'scankit')
-          build_with_script ScanKit
+          target+=$scankit'...'
           ;;
         'rendersplats')
           target+=$scankit'Neural:RenderSplats'
