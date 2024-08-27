@@ -44,7 +44,7 @@ build() {
       cmd="$cmd -h"
       ;;
     *)
-      cmd="$cmd $1"
+      cmd="$cmd --project $1"
 
       if [[ "$2" == "cuda" ]];
       then
