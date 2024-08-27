@@ -1,4 +1,4 @@
-from utils.utils import * 
+from python.utils import * 
 
 def drcconv(decoder, drc, out, base64="no"):
   if path_exists(decoder):

@@ -1,4 +1,10 @@
 # Sourcing
+declare -a alias_locs=($ALIAS_LOC $LOCAL_ALIAS_LOC)
+
+for file in ~/.oh-my-john/oh-my-zsh/src/env/*; do
+  set -a; source $file; set +a
+done
+
 for file in ~/.oh-my-john/oh-my-zsh/src/utils/*.zsh; do
   source $file
 done
@@ -50,5 +56,5 @@ reload() {
   then
     clear
   fi
-  exec zsh
+  source ~/.zshrc
 }

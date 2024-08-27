@@ -3,7 +3,7 @@ import re
 import shutil
 
 from pathlib import Path
-from utils.utils import *
+from utils import *
 
 global splat_dir, meshing37_dir, out_dir, out_gt_dir, out_seq_dir
 
@@ -151,8 +151,6 @@ def create_mesh(input, output="", nets="", auto_convert=True):
 
 def mesh_eval(config):
   rp("python3 " + env("INFINITAM") + "/scripts/MeshEval/run_full_test.py --config_file_path " + config)
-
-
 
 
 if __name__ == "__main__":

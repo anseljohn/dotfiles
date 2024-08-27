@@ -2,7 +2,6 @@ import os
 import subprocess
 
   
-
 def path_exists(path):
   return os.path.exists(path)
 
@@ -12,8 +11,30 @@ def makedirs(path):
 def execute(cmd, output=False):
   return subprocess.run(cmd, shell=True, executable="/bin/zsh", capture_output=output, text=output)
 
+def output(cmd):
+  return execute(cmd, True).stdout.strip()
+
 def env(var):
-  return execute("source ~/.oh-my-john/oh-my-zsh/src/utils/dirs.zsh && echo -n $" + var, True).stdout.strip()
+  return execute("echo -n $" + var, True).stdout.strip()
+
+def cd(path):
+  global currdir
+  currdir = os.getcwd()
+  os.chdir(path)
+
+def pwd():
+  ret = os.getcwd()
+  print(ret)
+  return ret
+
+def in_dir(path):
+  return path in os.getcwd()
+
+def in_monorepo():
+  return in_dir(env("MONOREPO"))
+
+def back():
+  os.chdir(currdir)
 
 def cmdify(args):
   return " ".join([str(arg) for arg in args])

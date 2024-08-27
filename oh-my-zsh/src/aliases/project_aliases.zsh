@@ -57,59 +57,13 @@ build_with_script() {
 
 # Project stuff
 build() {
-    if isMonorepo ;
-    then
-      bb='bazel build '
-      target=''
-      scankit='-- //argeo/scaniverse/ScanKit/ScanKit/'
-      infinitam='-- //argeo/infinitam'
-      case $1 in
-        '--debug')
-          opts+=' --config debug'
-          target+=$scankit'Neural/...'
-          ;;
-        'infinitam')
-          build_with_script infinitam $2
-          return
-          ;;
-        'massf')
-          build_with_script mapping-framework $2
-          return
-          ;;
-        'pipeline')
-          target+=$scankit'Pipeline/...'
-          ;;
-        'neural')
-          target+=$scankit'Neural/...'
-          ;;
-        'scankit')
-          target+=$scankit'...'
-          ;;
-        'rendersplats')
-          target+=$scankit'Neural:RenderSplats'
-          ;;
-        '--targets')
-          echo "Available targets:"
-          echo "[infinitam, massf, pipeline, neural, scankit, rendersplats]"
-          echo "ex."
-          echo "$ build neural"
-          return 1
-          ;;
-        *)
-          echo "Invalid build target."
-          echo "ex."
-          echo "$ build neural : runs bazel build -- //argeo/scaniverse/ScanKit/ScanKit/Neural/..."
-          return 0
-        ;;
+  cmd="python3 $BAZEL_BUILD --project $1"
+  if [[ "$2" == "cuda" ]];
+  then
+    cmd="$cmd --cuda"
+  fi
 
-      esac
-      opts=${@:2}" "
-      fs=$bb$opts$target
-      echo "Running '$fs'"
-      eval $fs
-    else
-        echo "Not in a buildable directory."
-    fi
+  eval "$cmd"
 }
 
 prepScan() {
@@ -205,7 +159,7 @@ renderSplats() {
       fi
       ;;
     "mass")
-      python3 $OH_MY_JOHN/meshing37_utils.py render $2 $MESHING37
+      python3 $M37_UTILS render $2 $MESHING37
       ;;
     *)
       args=$@
@@ -221,7 +175,7 @@ copyDepths() {
   else
     case "$1" in
       "mass")
-        python3 $OH_MY_JOHN/meshing37_utils.py copyDepths $2 $3 $MASSF
+        python3 $M37_UTILS copyDepths $2 $3 $MASSF
         ;;
       *)
         python3 $MASSF/tools/scripts/meshing_tools/copy_splat_depths_to_v2.py $1 $2
@@ -272,10 +226,10 @@ benchmark() {
 createmesh() {
   if [[ "$1" == *".txt"* ]];
   then
-    python3 $OH_MY_JOHN/meshing37_utils.py create $1
+    python3 $M37_UTILS create $1
   elif [[ $# -ge 2 ]];
   then
-    python3 $OH_MY_JOHN/meshing37_utils.py create $1 $2 $NETS
+    python3 $M37_UTILS create $1 $2 $NETS
   else
     err "Invalid number of arguments."
     echo "Usage:"
@@ -287,7 +241,7 @@ createmesh() {
 mesheval() {
   if [[ $# -eq 1 ]];
   then
-    python3 $OH_MY_JOHN/meshing37_utils.py eval $1
+    python3 $M37_UTILS eval $1
   else
     err "Invalid number of arguments."
     echo "Usage: mesheval <path/to/config.txt>"
@@ -313,7 +267,7 @@ m37() {
       fi
       ;;
     "config")
-      call="python3 $OH_MY_JOHN/meshing37_utils.py config"
+      call="python3 $M37_UTILS config"
       if [[ "$2" != "" ]];
       then
         call="$call $2"
@@ -321,7 +275,7 @@ m37() {
       eval "$call"
       ;;
     *)
-      call="python3 $OH_MY_JOHN/meshing37_utils.py setup $1 $MESHING37"
+      call="python3 $M37_UTILS setup $1 $MESHING37"
       if [[ "$2" != "" ]];
       then
         call="$call $2"
