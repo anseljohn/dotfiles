@@ -16,7 +16,7 @@ for loc in ${alias_locs[@]}; do
   done
 done
 
-# source $OH_MY_JOHN/utils/def_aliases.zsh
+source $OH_MY_JOHN/utils/def_aliases.zsh
 
 aliases() {
   groups=("git" "project" "vm" "docker")
