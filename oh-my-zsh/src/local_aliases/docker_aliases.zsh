@@ -51,7 +51,8 @@ dk() {
           ;;
         "cuda")
           cd $MONOREPO/argeo/docker-mapping-dev-env
-          ./init_cuda_docker_dev_env.sh /home/johnanselmo_nianticlabs_com/dev/niantic ~/dev/niantic
+          # ./init_cuda_docker_dev_env.sh /home/johnanselmo_nianticlabs_com/dev/niantic ~/dev/niantic
+          ./bootstrap_cuda_docker_dev_env.sh
           back
           ;;
         "test:main")
