@@ -1,4 +1,4 @@
-from python.utils import * 
+from utils import * 
 
 def drcconv(decoder, drc, out, base64="no"):
   if path_exists(decoder):
@@ -19,4 +19,4 @@ if __name__ == "__main__":
   elif len(args) == 4:
     drcconv(args[0], args[1], args[2], args[3])
   else:
-    err("Usage: python3 draco.py decoder drc out (base64)")
+    err("Usage: p3 draco.py decoder drc out (base64)")

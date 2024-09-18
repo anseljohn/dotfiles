@@ -28,16 +28,16 @@ drcconv() {
 
     if [ "$use_draco" = true ];
     then
-      python3 $DRACO $DRACO_DECODER $1 $2
+      p3 $DRACO $DRACO_DECODER $1 $2
     else
-      python3 $DRACO $DRACO_CONVERTER $1 $2 $base64
+      p3 $DRACO $DRACO_CONVERTER $1 $2 $base64
     fi
 }
 
 
 # Project stuff
 build() {
-  cmd="python3 $BAZEL_BUILD"
+  cmd="p3 $BAZEL_BUILD"
 
   case $1 in
     "-h")
@@ -149,7 +149,7 @@ renderSplats() {
       fi
       ;;
     "mass")
-      python3 $M37_UTILS render $2 $MESHING37
+      p3 $M37_UTILS render $2 $MESHING37
       ;;
     *)
       args=$@
@@ -165,10 +165,10 @@ copyDepths() {
   else
     case "$1" in
       "mass")
-        python3 $M37_UTILS copyDepths $2 $3 $MASSF
+        p3 $M37_UTILS copyDepths $2 $3 $MASSF
         ;;
       *)
-        python3 $MASSF/tools/scripts/meshing_tools/copy_splat_depths_to_v2.py $1 $2
+        p3 $MASSF/tools/scripts/meshing_tools/copy_splat_depths_to_v2.py $1 $2
     esac
   fi
 
@@ -216,10 +216,10 @@ benchmark() {
 createmesh() {
   if [[ "$1" == *".txt"* ]];
   then
-    python3 $M37_UTILS create $1
+    p3 $M37_UTILS create $1
   elif [[ $# -ge 2 ]];
   then
-    python3 $M37_UTILS create $1 $2 $NETS
+    p3 $M37_UTILS create $1 $2 $NETS
   else
     err "Invalid number of arguments."
     echo "Usage:"
@@ -231,7 +231,7 @@ createmesh() {
 mesheval() {
   if [[ $# -eq 1 ]];
   then
-    python3 $M37_UTILS eval $1
+    p3 $M37_UTILS eval $1
   else
     err "Invalid number of arguments."
     echo "Usage: mesheval <path/to/config.txt>"
@@ -257,7 +257,7 @@ m37() {
       fi
       ;;
     "config")
-      call="python3 $M37_UTILS config"
+      call="p3 $M37_UTILS config"
       if [[ "$2" != "" ]];
       then
         call="$call $2"
@@ -265,11 +265,21 @@ m37() {
       eval "$call"
       ;;
     *)
-      call="python3 $M37_UTILS setup $1 $MESHING37"
+      call="p3 $M37_UTILS setup $1 $MESHING37"
       if [[ "$2" != "" ]];
       then
         call="$call $2"
       fi
       eval "$call"
   esac
+}
+
+genConfig() {
+  if [[ $# -eq 2 ]];
+  then
+    p3 $JOB_SUBMITTER $1 $2
+  else
+    err "Invalid number of arguments."
+    echo "Usage: genConfig <path/to/config.txt>"
+  fi
 }

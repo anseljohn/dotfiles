@@ -5,6 +5,7 @@
 
 alias vim='nvim'
 alias evim="vim $VIM_CONFIG"
+alias p3="python3"
 ealias() {
   case $1 in
     "")
@@ -46,6 +47,7 @@ alias dot="cd $DEV/dotfiles"
 alias ohmy="cd $USERD/.oh-my-zsh"
 
 # Misc
+alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
 alias rmf='rm -rf'
 alias rms='rm -rf *'
 alias x='exit'

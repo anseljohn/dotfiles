@@ -53,6 +53,9 @@ def succ(txt):
 def warn(txt):
   print(bcolors.WARNING + "WARNING: " + bcolors.ENDC + txt)
 
+def info(txt):
+  print(bcolors.OKCYAN + "INFO: " + bcolors.ENDC + txt)
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

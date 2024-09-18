@@ -13,6 +13,10 @@ alias add='git add'
 alias merge='git merge'
 alias check='git checkout'
 
+branches() {
+  p3 $GITPY branches $@
+}
+
 rebase() {
   case "$1" in
   "")
@@ -80,9 +84,11 @@ commit() {
 push() {
   case $1 in
     "")
+      # p3 $GITPY push
       git push
       ;;
     "--force")
+      # p3 $GITPY push --force
       branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
       git push origin HEAD:$branch --force
       ;;
