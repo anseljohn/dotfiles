@@ -53,3 +53,4 @@ vmcp() {
 }
 
 alias vmup="vmcp --vim && vmcp --aliases"
+alias gcauth="gcloud auth application-default login"

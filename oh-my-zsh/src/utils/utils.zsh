@@ -38,12 +38,12 @@ edot() {
 
 # To Dirs
 alias mono="cd $MONOREPO"
+alias main="cd $MAIN"
 alias massf="cd $MASSF"
 alias infinitam="cd $INFINITAM"
 alias dev="cd $DEV"
 alias down="cd $USERD/Downloads"
 alias back="cd - > /dev/null"
-alias dot="cd $DEV/dotfiles"
 alias ohmy="cd $USERD/.oh-my-zsh"
 
 # Misc
@@ -51,6 +51,8 @@ alias code="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/co
 alias rmf='rm -rf'
 alias rms='rm -rf *'
 alias x='exit'
+alias fc='find . -maxdepth 1 -exec echo \; | wc -l'
+
 alias fuck='figlet "fuck $@"'
 alias fucking='figlet "fucking $@"'
 alias fuckin='figlet "fuckin $@"'

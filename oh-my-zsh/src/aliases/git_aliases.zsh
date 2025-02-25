@@ -28,7 +28,7 @@ rebase() {
 }
 
 reset() {
-  git reset $@
+  p3 $GITPY_DIR/reset.py $@
 }
 
 stash() {

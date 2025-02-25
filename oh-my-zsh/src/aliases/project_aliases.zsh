@@ -98,8 +98,7 @@ trainSplats() {
         echo "Invalid output directory."
         echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
       else
-        rm -rf $3
-        trainSplats ${@:2}
+        rm -rf $3 && trainSplats ${@:2}
       fi
       ;;
     *)
@@ -115,9 +114,9 @@ trainSplats() {
         --output $2 \\
         --useDensePoints \\
         --disableExposureModel \\
-        --useAppPhases \\
         --renderInterval 10 \\
         --pos 0.4,0,0 --target 0,0,-5 $leftovers"
+        cat $2/stats.txt
       fi
   esac
 }
@@ -171,7 +170,16 @@ copyDepths() {
         p3 $MASSF/tools/scripts/meshing_tools/copy_splat_depths_to_v2.py $1 $2
     esac
   fi
+}
 
+copyMasks() {
+  if [ $# -ne 2 ];
+  then
+    err "Invalid number of arguments."
+    echo "Syntax: copyMasks <path/to/multidepth_console/output> <path/to/prepareScanOutput>"
+  else
+    ~/dev/tools/SkySegmentation/copy_sky_masks.sh $1 $2
+  fi
 }
 
 benchmark() {
@@ -206,6 +214,7 @@ benchmark() {
       --useDensePoints \
       --disableExposureModel \
       --useAppPhases \
+      --valAllFrames \
       --renderInterval 0 \
       --pos 0.4,0,0 --target 0,0,-5
   else
