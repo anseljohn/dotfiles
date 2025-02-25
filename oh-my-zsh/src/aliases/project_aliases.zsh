@@ -35,6 +35,19 @@ drcconv() {
 }
 
 
+# Mapping utilities
+monitor() {
+  if [ "$#" -lt 2 ] || [ "$#" -gt 2 ]; then
+    err "Invalid syntax."
+    echo "Usage: monitor mc-workflow-name cluster-name"
+  else
+    $MAP_UTILS/mapping_utilities connect-dashboard -w $1 -e $2 
+    
+    succ "You may monitor this job at http://localhost:8265"
+  fi
+}
+
+
 # Project stuff
 build() {
   cmd="p3 $BAZEL_BUILD"
