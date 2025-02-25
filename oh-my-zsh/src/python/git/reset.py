@@ -16,37 +16,6 @@ def reset(hard):
 def checkout(branch, file):
   execute(f"git checkout {branch} -- {file}")
 
-def branch():
-  return output("git rev-parse --abbrev-ref HEAD 2>/dev/null")
-
-def push(opt):
-  match opt:
-    case "":
-      attempt = execute("git push", True)
-      # if "fatal" in attempt:
-      #   info("No upstream branch set. Creating one...")
-      #   execute(f"git push --set-upstream origin {branch()}")
-      # else:
-      print(attempt)
-      print("??")
-
-    case "--force":
-      execute(f"git push origin HEAD:{branch()} --force", True)
-
-
-def branches(args):
-  call = ""
-  if args.all:
-    call = "git branch -a"
-  else:
-    call = "git branch"
-
-  if args.self:
-    call += " | grep johna"
-
-  execute(call)
-
-
 if __name__ == "__main__":
   arg_parser = argparse.ArgumentParser(description="Git aliases.")
   arg_parser.add_argument(
