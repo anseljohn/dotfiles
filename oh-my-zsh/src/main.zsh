@@ -1,5 +1,5 @@
 #!/bin/zsh
-
+export PYTHON_BIN_PATH=$(which python3)
 # Sourcing
 for file in ~/.oh-my-john/oh-my-zsh/src/env/*; do
   set -a; source $file; set +a

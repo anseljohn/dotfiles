@@ -10,6 +10,51 @@ isMonorepo() {
 
 alias emono="code $MONOREPO"
 alias multidepth_console="$MONOREPO/bazel-bin/argeo/infinitam/multidepth_console"
+alias gauth="gcloud auth application-default login"
+
+vcp() {
+  if [[ "$#" -eq 2 ]]; then
+    if [[ $1 == gs* ]]; then   # True if $a starts with a "z" (wildcard matching).
+      if [ -d "$2" ]; then
+        gcloud storage cp -r $1 $2
+      else
+        mkdir -p $2
+        vcp $1 $2
+      fi
+    elif [[ $1 == *:* ]] || [[ $2 == *:* ]]; then
+      gcloud compute scp $1 $2 --zone "us-west1-b"
+    else
+      echo "Invalid syntax."
+      echo "Usage: vcp [-vm | -gs] <src> <dst>"
+      echo "Copy gcloud file:"
+      echo "\tvcp gs://bucket/file.txt ~/path/to/local/dst.txt"
+      echo "Copy to/from vm:"
+      echo "\tvcp VM_NAME:/path/to/file.txt ~/path/to/local/dst.txt"
+      echo "\tvcp ~/path/to/local/src.txt VM_NAME:/path/to/file.txt"
+    fi
+  else
+    echo "Invalid syntax."
+    echo "Usage: vcp [-vm | -gs] <src> <dst>"
+    echo "Copy gcloud file:"
+    echo "\tvcp gs://bucket/file.txt ~/path/to/local/dst.txt"
+    echo "Copy to/from vm:"
+    echo "\tvcp VM_NAME:/path/to/file.txt ~/path/to/local/dst.txt"
+    echo "\tvcp ~/path/to/local/src.txt VM_NAME:/path/to/file.txt"
+  fi
+  # if [[ "$#" -eq 2 ]]; then
+  #   gcloud compute scp $1 $2 --zone "us-west1-b"
+  # elif [[ "$#" -eq 1 ]]; then
+  #   if [ -d "$1" ]; then
+  #     gcloud storage cp -r $1
+  #   else
+  #     mkdir -p $1
+  #     vcp $1
+  #   fi
+  # else
+  #   echo "Invalid syntax."
+  #   echo "Usage:"
+  # fi
+}
 
 drcconv() {
     base64="no"
@@ -41,9 +86,9 @@ monitor() {
     err "Invalid syntax."
     echo "Usage: monitor mc-workflow-name cluster-name"
   else
-    $MAP_UTILS/mapping_utilities connect-dashboard -w $1 -e $2 
-    
-    succ "You may monitor this job at http://localhost:8265"
+    cd $MAP_UTILS
+   ./mapping_utilities connect-dashboard -w $1 -e $2 
+   back
   fi
 }
 
