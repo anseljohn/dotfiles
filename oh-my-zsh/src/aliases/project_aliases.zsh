@@ -1,6 +1,6 @@
 # Determine directory/repo
 isMonorepo() {
-    if [[ $PWD/ =~ "/niantic/" ]];
+    if [[ $PWD/ =~ "/niantic/" ]] || [[ $PWD/ =~ "/spatial/" ]];
     then
         return 0
     else

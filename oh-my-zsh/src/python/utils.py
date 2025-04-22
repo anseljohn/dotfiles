@@ -31,7 +31,7 @@ def in_dir(path):
   return path in os.getcwd()
 
 def in_monorepo():
-  return in_dir(env("MONOREPO"))
+  return in_dir(env("MONOREPO")) or in_dir(env("SPATIAL"))
 
 def back():
   os.chdir(currdir)
