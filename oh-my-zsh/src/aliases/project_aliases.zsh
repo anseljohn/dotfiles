@@ -114,6 +114,67 @@ build() {
   eval "$cmd"
 }
 
+cppoi-act() {
+  if [[ "$#" -eq 3 ]]; then
+    echo "Copying POI(s) from $2 to $3..."
+    cppoi $1 $2 $3
+    echo "Done.\n"
+    echo "Activating wayspots on $3..."
+    activateWayspot $1 $3
+    echo "Done."
+  else
+    echo "Invalid syntax."
+    echo "Usage: cppoi-act <poi-id or poi-list.csv> <source env [dev, stg, prod]> <dest env [dev, stg, prod]>"
+  fi
+}
+
+cppoi() {
+  if [[ "$#" -eq 3 ]]; then
+    source ~/dev/venv/venv0/bin/activate
+    cd $SPATIAL/argeo/map-builder-pipeline/scripts
+
+    if [[ "$1" == *.csv ]]; then
+      if [[ -f "$1" ]]; then
+        python -m developer_tools.copy_scan_data --src $2 --dest $3 --poi-list-file $1 --num-viable-scans 400
+      else
+        echo "POI list file $1 not found."
+        return 1
+      fi
+    else
+      python -m developer_tools.copy_scan_data --src $2 --dest $3 --poi-id $1 --num-viable-scans 400
+    fi
+
+    back
+    reload
+  else
+    echo "Invalid syntax."
+    echo "Usage: cppoi <poi-id or poi-list.csv> <source env [dev, stg, prod]> <dest env [dev, stg, prod]>"
+  fi
+}
+
+activateWayspot() {
+  if [[ "$#" -eq 2 ]]; then
+    cd $SPATIAL/argeo/map-builder-pipeline/tools/mapping_utilities
+    go build
+
+    if [[ "$1" == *.csv ]]; then
+      if [[ -f "$1" ]]; then
+        ./mapping_utilities submit-portal-request -e $2 --endpoint '/map_wayspot' --input-list-file $1
+      else
+        POI list file $1 not found.
+        return 1
+      fi
+    else
+      ./mapping_utilities submit-portal-request -e $2 --endpoint '/map_wayspot' --input-ids $1
+    fi
+
+    back
+  else
+    echo "Invalid syntax."
+    echo "Usage: activateWayspot <poi-id or poi-list.csv> <env [dev, stg, prod]>"
+  fi
+}
+
 prepScan() {
   if isMonorepo ;
   then
@@ -123,6 +184,15 @@ prepScan() {
         bazel run //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan -- $statue \
           --output ~/prepped_scan
         ;;
+    "-d")
+      if [[ "$3" == "" ]];
+      then
+        echo "Invalid output directory."
+        echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
+      else
+        rm -rf $3 && prepScan ${@:2}
+      fi
+      ;;
       *)
         if [[ "$2" == "" ]];
         then
