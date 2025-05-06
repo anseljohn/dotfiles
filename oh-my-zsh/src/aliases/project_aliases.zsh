@@ -114,6 +114,13 @@ build() {
   eval "$cmd"
 }
 
+monjob() {
+  if [[ "$#" -eq 2 ]]; then
+  else
+  fi
+  # ./mapping_utilities connect-dashboard -w mc-20250327213111-77df896 -e map-stagingc-usc1-cluster
+}
+
 cppoi-act() {
   if [[ "$#" -eq 3 ]]; then
     echo "Copying POI(s) from $2 to $3..."
