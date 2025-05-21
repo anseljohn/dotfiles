@@ -37,7 +37,7 @@ edot() {
 }
 
 # To Dirs
-alias mono="cd $MONOREPO"
+alias spatial="cd $SPATIAL"
 alias main="cd $MAIN"
 alias massf="cd $MASSF"
 alias infinitam="cd $INFINITAM"

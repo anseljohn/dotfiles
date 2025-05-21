@@ -1,6 +1,6 @@
 # Determine directory/repo
 isMonorepo() {
-    if [[ $PWD/ =~ "/niantic/" ]] || [[ $PWD/ =~ "/spatial/" ]];
+    if [[ $PWD/ =~ "/spatial/" ]];
     then
         return 0
     else
@@ -8,9 +8,20 @@ isMonorepo() {
     fi
 }
 
-alias emono="code $MONOREPO"
-alias multidepth_console="$MONOREPO/bazel-bin/argeo/infinitam/multidepth_console"
 alias gauth="gcloud auth application-default login"
+
+getspace() {
+  if ! conda info --envs | grep -q "^get-space "; then
+    echo "getspace conda env does not exist. Creating it..."
+    conda create -y -n get-space python=3.10
+    conda activate get-space
+    python -m pip install argparse gcloud google-cloud-storage google-cloud-spanner
+    echo "DONE"
+    python ~/dev/tools/tk/get_space.py $@
+  else
+    conda run -n get-space python ~/dev/tools/tk/get_space.py $@
+  fi
+}
 
 vcp() {
   if [[ "$#" -eq 2 ]]; then

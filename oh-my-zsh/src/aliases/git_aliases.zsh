@@ -36,7 +36,13 @@ stash() {
     "")
       git stash
       ;;
-    "list"|"show"|"drop"|"apply")
+    "state")
+      git stash push -k -m $3
+      ;;
+    "apply"|"drop")
+      git stash $1 stash@{$2}
+      ;;
+    "list"|"show"|"apply")
       git stash $@
       ;;
     *)
