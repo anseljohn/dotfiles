@@ -10,4 +10,4 @@ cp -fr ~/.oh-my-john/oh-my-zsh/src/aliases.zsh ~/.oh-my-zsh/custom
 source ~/.zshrc
 
 # Cleanup
-rm -rf $dotfiles
+echo rm -rf $dotfiles

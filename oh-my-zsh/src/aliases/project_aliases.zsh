@@ -23,6 +23,32 @@ getspace() {
   fi
 }
 
+getsplat() {
+  if [[ $# -lt 1 ]]; then
+    echo "Usage: getsplat <gs://path/to/splat> [output_name]"
+    return 1
+  fi
+
+  gspath="$1"
+  if [[ $# -ge 2 ]]; then
+    outname="$2"
+  else
+    # Extract the last part of the path and add .spz
+    filename="${gspath##*/}"
+    outname="${filename}.spz"
+  fi
+
+  # Download the file
+  gcloud storage cp "$gspath" "$outname"
+  if [[ $? -ne 0 ]]; then
+    echo "Failed to download $gspath"
+    return 1
+  fi
+
+  echo "Downloaded $gspath to $outname"
+}
+
+
 vcp() {
   if [[ "$#" -eq 2 ]]; then
     if [[ $1 == gs* ]]; then   # True if $a starts with a "z" (wildcard matching).
@@ -208,7 +234,7 @@ prepScan() {
         echo "Invalid output directory."
         echo "Usage: trainSplats <path/to/prepped/scan> <path/to/output/folder>"
       else
-        rm -rf $3 && prepScan ${@:2}
+        rm -rf "$3" && prepScan "${@:2:${#}+1}"
       fi
       ;;
       *)
@@ -217,7 +243,7 @@ prepScan() {
           echo "Invalid output."
           echo "Usage: prepScan <path/to/scan.tgz> <path/to/output/folder>"
         else
-          rp "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan $1 --output ${@:2}"
+          rp "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:PrepareScan $1 --output $2 ${@:3}"
         fi
     esac
   else
@@ -255,6 +281,7 @@ trainSplats() {
       else
         leftovers=${@:3:${#}}
         echo $leftovers
+
         rp "bazel run -- //argeo/scaniverse/ScanKit/ScanKit/Neural:TrainSplats \\
         $1 \\
         --output $2 \\

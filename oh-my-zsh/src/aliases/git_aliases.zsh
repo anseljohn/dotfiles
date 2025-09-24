@@ -212,6 +212,8 @@ pull_aliases() {
 pull_vim() {
   cd $OMJ_HOME
   pull &>/dev/null
+  mkdir -p ~/.config/nvim/autoload
+  cp nvim/
   rm -rf ~/.config/nvim/init.lua
   cp nvim/init.lua ~/.config/nvim/
   succ "neovim init updated."

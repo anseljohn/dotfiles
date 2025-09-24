@@ -2,10 +2,10 @@ VM_HOME="/home/johnanselmo_nianticlabs_com"
 VM_ALIAS="$VM_HOME/.oh-my-zsh/custom/"
 VM_VIM_CONFIG="$VM_HOME/.config/nvim/"
 
-VM_NAME="johnanselmo-ubuntu-focal"
-VM_PROJECT_NAME="corp-work-machines"
+VM_NAME="johna"
+VM_PROJECT_NAME="mcmc-193822"
 VM_ZONE="us-west1-b"
-VM_COMMAND="gcloud compute ssh $VM_NAME --project=corp-work-machines --zone=us-west1-b"
+VM_COMMAND="gcloud compute ssh $VM_NAME --project=$VM_PROJECT_NAME --zone=us-west1-b --tunnel-through-iap"
 
 vm() {
   if [[ "$1" == "project" ]];
