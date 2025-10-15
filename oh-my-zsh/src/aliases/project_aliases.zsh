@@ -23,8 +23,8 @@ log() {
   # Create directory if it doesn't exist
   mkdir -p "$log_dir"
   
-  # Open in vim at the end of the file
-  vim + "$log_file"
+  # Open in vim at the end of the file, end of line
+  vim "+normal G$" "$log_file"
 }
 
 getspace() {
