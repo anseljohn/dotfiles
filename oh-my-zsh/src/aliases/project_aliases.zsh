@@ -10,6 +10,23 @@ isMonorepo() {
 
 alias gauth="gcloud auth application-default login"
 
+log() {
+  # Get today's date in YY/MM/DD format
+  local year=$(date +%y)
+  local month=$(date +%m)
+  local day=$(date +%d)
+  
+  # Construct the path
+  local log_dir="$HOME/dev/logs/$year/$month"
+  local log_file="$log_dir/$day.txt"
+  
+  # Create directory if it doesn't exist
+  mkdir -p "$log_dir"
+  
+  # Open in vim
+  vim "$log_file"
+}
+
 getspace() {
   if ! conda info --envs | grep -q "^get-space "; then
     echo "getspace conda env does not exist. Creating it..."
