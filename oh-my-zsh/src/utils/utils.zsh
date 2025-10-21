@@ -12,7 +12,7 @@ ealias() {
       vim $OH_MY_JOHN
       ;;
     "code")
-      code $OH_MY_JOHN
+      cursor $OH_MY_JOHN
       ;;
     *)
       err "Invalid syntax."

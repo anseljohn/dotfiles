@@ -11,6 +11,12 @@ isMonorepo() {
 alias gauth="gcloud auth application-default login"
 
 log() {
+  # Check if first argument is "read"
+  if [[ "$1" == "read" ]]; then
+    log_read "$@"
+    return $?
+  fi
+  
   # Get today's date in YY/MM/DD format
   local year=$(date +%y)
   local month=$(date +%m)
@@ -23,8 +29,56 @@ log() {
   # Create directory if it doesn't exist
   mkdir -p "$log_dir"
   
+  # Get timestamp
+  local timestamp=$(date +"%H:%M:%S %Z")
+  
+  # Append timestamp with spacing (add blank line, then timestamp line)
+  echo "" >> "$log_file"
+  echo -n "$timestamp - " >> "$log_file"
+  
   # Open in vim at the end of the file, end of line
   vim "+normal G$" "$log_file"
+}
+
+log_read() {
+  # Check if we have the right number of arguments
+  if [[ $# -ne 2 ]] || [[ "$1" != "read" ]]; then
+    echo "Usage: log read MM/DD/YY"
+    echo "Example: log read 10/21/25"
+    return 1
+  fi
+  
+  local date_input="$2"
+  
+  # Parse the MM/DD/YY format using zsh parameter expansion
+  if [[ ! "$date_input" =~ ^[0-9]{1,2}/[0-9]{1,2}/[0-9]{2}$ ]]; then
+    echo "Error: Invalid date format. Use MM/DD/YY (e.g., 10/21/25)"
+    return 1
+  fi
+  
+  # Split the date using zsh parameter expansion
+  local month="${date_input%%/*}"           # Everything before first /
+  local temp="${date_input#*/}"             # Remove first part and /
+  local day="${temp%%/*}"                   # Everything before second /
+  local year="${temp#*/}"                   # Everything after second /
+  
+  # Pad with zeros if needed
+  month=$(printf "%02d" "$month")
+  day=$(printf "%02d" "$day")
+  
+  # Construct the path
+  local log_dir="$HOME/dev/logs/$year/$month"
+  local log_file="$log_dir/$day.txt"
+  
+  # Check if the log file exists
+  if [[ ! -f "$log_file" ]]; then
+    echo "Log file not found: $log_file"
+    return 1
+  fi
+  
+  # Display the log file
+  echo "=== Log for $month/$day/$year ==="
+  cat "$log_file"
 }
 
 getspace() {
